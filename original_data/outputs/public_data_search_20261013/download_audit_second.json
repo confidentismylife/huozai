@@ -1,0 +1,20 @@
+[
+  {
+    "name": "coach_supplement.xlsx",
+    "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1007%2Fs10694-022-01253-y/MediaObjects/10694_2022_1253_MOESM1_ESM.xlsx",
+    "status": "saved",
+    "bytes": 16421
+  },
+  {
+    "name": "queuing_data.zip",
+    "url": "https://datadryad.org/downloads/file_stream/72224",
+    "status": "error",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
+    "name": "darmstadt_page.html",
+    "url": "https://tudatalib.ulb.tu-darmstadt.de/items/06fbf858-033d-4a64-b78f-9518560a31df",
+    "status": "saved",
+    "bytes": 856555
+  }
+]

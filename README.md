@@ -19,6 +19,11 @@
 
 ## 文件
 
+- [model_weights/](model_weights/)：项目保存的模型权重、训练检查点与拟合参数，可单独下载。
+- [original_data/](original_data/)：原始公开数据、用户提供的Excel/PPT和数据来源记录。
+- [workspace/](workspace/)：核心研究代码、运行脚本、测试、协议和报告。
+- [conversation/](conversation/)：本机保存的原始用户/助手对话与附件，密钥已脱敏。
+- [FULL_BACKUP.md](FULL_BACKUP.md)：完整工作区分卷压缩备份与恢复说明。
 - [CONVERSATION_TIMELINE.md](CONVERSATION_TIMELINE.md)：研究对话与决策时间线。
 - [EXPERIMENT_INDEX.md](EXPERIMENT_INDEX.md)：实验路线、主要结果和证据边界。
 - [CURRENT_STATUS.md](CURRENT_STATUS.md)：当前最可靠结论、未解决问题和下一步。

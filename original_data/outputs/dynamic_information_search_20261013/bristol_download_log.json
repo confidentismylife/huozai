@@ -1,0 +1,16 @@
+[
+  {
+    "file": "README.txt",
+    "url": "https://data.bristol.ac.uk/datasets/3kn82h2aamsfw2eplor4v2ewk0/README.txt",
+    "status": "saved",
+    "bytes": 5019,
+    "sha256": "c272e39c50680a35318ee64f4dfc4b841a533a75ef20fbe275c89e1c338fa0e8"
+  },
+  {
+    "file": "3kn82h2aamsfw2eplor4v2ewk0.zip",
+    "url": "https://data.bristol.ac.uk/datasets/3kn82h2aamsfw2eplor4v2ewk0/3kn82h2aamsfw2eplor4v2ewk0.zip",
+    "status": "saved",
+    "bytes": 2971358,
+    "sha256": "9860f2f8e811e455b0ae0f6919e61588ee9fea999cbf0e6a650f29642bfad846"
+  }
+]

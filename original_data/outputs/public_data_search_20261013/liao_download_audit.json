@@ -1,0 +1,74 @@
+[
+  {
+    "id": 4630006,
+    "license": {
+      "value": 1,
+      "name": "CC BY 4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "description": "Here we present supplementary information for the article “Route choice in pedestrians: determinants for initial choices and revising decisions” published in Journal of the Royal Society Interface.",
+    "files": [
+      {
+        "name": "rsif20160684_si_001.pdf",
+        "bytes": 2101818,
+        "url": "https://ndownloader.figshare.com/files/7623691",
+        "md5_matches": true,
+        "sha256": "297bc31af354779b077a7cd1e0c3475e989ad4884a922613b4d8499db0c0c83f"
+      }
+    ]
+  },
+  {
+    "id": 4630012,
+    "license": {
+      "value": 1,
+      "name": "CC BY 4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "description": "Here we present supplementary information for the article “Route choice in pedestrians: determinants for initial choices and revising decisions” published in Journal of the Royal Society Interface.",
+    "files": [
+      {
+        "name": "rsif20160684_si_003.txt",
+        "bytes": 1864895,
+        "url": "https://ndownloader.figshare.com/files/7534669",
+        "md5_matches": true,
+        "sha256": "21e8623900a759a441c2eecfb6b85163b8789e6ca69228e0f62b2903d3051532"
+      }
+    ]
+  },
+  {
+    "id": 4630009,
+    "license": {
+      "value": 1,
+      "name": "CC BY 4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "description": "Here we present supplementary information for the article “Route choice in pedestrians: determinants for initial choices and revising decisions” published in Journal of the Royal Society Interface.",
+    "files": [
+      {
+        "name": "rsif20160684_si_004.txt",
+        "bytes": 1077013,
+        "url": "https://ndownloader.figshare.com/files/7534666",
+        "md5_matches": true,
+        "sha256": "4a46221b1c3aa84205ab16b3504f858385c9ea25ee577f23f342c8799a67d992"
+      }
+    ]
+  },
+  {
+    "id": 4629994,
+    "license": {
+      "value": 1,
+      "name": "CC BY 4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "description": "Here we present supplementary information for the article “Route choice in pedestrians: determinants for initial choices and revising decisions” published in Journal of the Royal Society Interface.",
+    "files": [
+      {
+        "name": "rsif20160684_si_002.txt",
+        "bytes": 2530300,
+        "url": "https://ndownloader.figshare.com/files/7534651",
+        "md5_matches": true,
+        "sha256": "ff73cdbe93a58659288d27eaebdbe0a01e7c11f7551320eeca607a928582f2a1"
+      }
+    ]
+  }
+]

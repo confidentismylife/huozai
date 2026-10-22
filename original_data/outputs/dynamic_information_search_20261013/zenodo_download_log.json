@@ -1,0 +1,38 @@
+[
+  {
+    "file": "G2.txt",
+    "url": "https://zenodo.org/api/records/3365464/files/G2.txt/content",
+    "bytes": 1226748,
+    "expected_bytes": 1226748,
+    "md5_matches": true,
+    "sha256": "82a1160e85d8e094483eb360fd2c4718165133d459dc6ad4c6fb6d0ca9391d6a",
+    "status": "saved"
+  },
+  {
+    "file": "G0.txt",
+    "url": "https://zenodo.org/api/records/3365464/files/G0.txt/content",
+    "bytes": 2837069,
+    "expected_bytes": 2837069,
+    "md5_matches": true,
+    "sha256": "fc9b2f1cd700277babe0403cb6d3c725874c19e8354e117f4a47d686ec362e09",
+    "status": "saved"
+  },
+  {
+    "file": "G3.txt",
+    "url": "https://zenodo.org/api/records/3365464/files/G3.txt/content",
+    "bytes": 3663334,
+    "expected_bytes": 3663334,
+    "md5_matches": true,
+    "sha256": "bbe45c189841fd4fc0b6efb2c53f671fb519da7d1aad1515d8c915badfb20957",
+    "status": "saved"
+  },
+  {
+    "file": "G1.txt",
+    "url": "https://zenodo.org/api/records/3365464/files/G1.txt/content",
+    "bytes": 3727535,
+    "expected_bytes": 3727535,
+    "md5_matches": true,
+    "sha256": "8476cac30874e02c3f6fcd24984f98900d7e6962fc62fd5b69773f883717cdbf",
+    "status": "saved"
+  }
+]

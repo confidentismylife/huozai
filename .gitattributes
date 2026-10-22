@@ -3,3 +3,6 @@
 *.md text eol=lf
 *.json text eol=lf
 *.jsonl text eol=lf
+# Preserve exact dataset/checkpoint bytes for the published SHA-256 indexes.
+model_weights/** -text
+original_data/** -text

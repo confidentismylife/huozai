@@ -1,0 +1,21 @@
+[
+  {
+    "name": "dryad_metadata.json",
+    "url": "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.7m645",
+    "bytes": 4274,
+    "content_type": "application/json; charset=utf-8",
+    "status": "saved"
+  },
+  {
+    "name": "zenodo_3365464.json",
+    "url": "https://zenodo.org/api/records/3365464",
+    "status": "error",
+    "error": "<urlopen error _ssl.c:1015: The handshake operation timed out>"
+  },
+  {
+    "name": "bristol_context.html",
+    "url": "https://data.bris.ac.uk/data/dataset/3kn82h2aamsfw2eplor4v2ewk0",
+    "status": "error",
+    "error": "The read operation timed out"
+  }
+]

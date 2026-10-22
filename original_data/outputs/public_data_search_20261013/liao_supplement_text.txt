@@ -1,0 +1,525 @@
+1 
+ 
+Supplementary information for “Route choice in pedestrians: 
+determinants for initial choices and revising decisions” 
+ 
+Weichen Liao*, Armel U. Kemloh Wagoum, Nikolai W. F. Bode 
+ 
+ 
+Abstract 
+Here we present supplementary information for the article “ Route choice in pedestrians: 
+determinants for initial choices and revising decisions ” published in Journal of the Royal Society 
+Interface. 
+ 
+ 
+1. Additional Figures 
+Further analysis carried out on the  experimental and simulated data are presented in the following 
+figures. 
+ 
+ 
+Figure S1: The egress time 𝑇 for each run of experiments A, B and C, respectively. 𝑁 is the sum of 
+𝑁I and 𝑁II, the numbers of participants in holding areas I and II, respectively . The horizontal line s 
+denote the average value for runs with the same initial conditions.  The corresponding mean 𝑇̅ and 
+standard deviation 𝜎𝑇̅ are given in supplementary table S2. 
+ 
+
+2 
+ 
+ 
+Figure S2: The mean values of 𝑡𝑖 and 𝑡𝑖𝑐 across 𝑛 pedestrians with path re -planning behaviour for 
+each run of experiments A, B and C, respectively. 𝑡𝑖 is the egress time for pedestrian 𝑖. 𝑡𝑖𝑐 is the 
+time until pedestrian 𝑖 changed her route. The values a re calculated based on supplementary table 
+S3. In runs for which no data is shown, no pedestrians showed path re-planning behaviour. 
+  
+
+3 
+ 
+ 
+Figure S3: The observed distribution of the ratio 𝑟 (𝑟 is the ratio of 𝑡𝑖𝑐 to 𝑡𝑖: 𝑟 = 𝑡𝑖𝑐 𝑡𝑖⁄  or time of 
+change in decision over total egress time) across all experimental runs. The red curve represents the 
+corresponding Gaussian kernel estimation of the histogram. According to a Kolmogorov-Smirnov 
+test, the distribution probability is highly consistent with a normal distribution with the mean and 
+standard deviation of 55.56% and 16.51%, respectively (see main text). 
+ 
+
+4 
+ 
+ 
+Figure S4: Part of our sensitivity analysis based on the quantity 𝑑𝑖𝑠𝑡 (see equation (3.3) in the main 
+text) for experiments A, B, and C, respectively. The calibration of parameters was performed across 
+all experimental runs in scenarios A, B and C. The simulations use 𝜃 = 0.5 and 𝛿 = -2 (see main text 
+for additional information on sensitivity analysis).  
+ 
+
+5 
+ 
+ 
+Figure S5: Sensitivity analysis for the model parameter 𝛼 which controls the relative weighting of a 
+preference for nearer exits in the initial route choice of pedestrians . Parameter calibration was 
+performed across all experimental runs in scenarios A, B and C. The simulations use 𝜃 = 0.5, 𝛿 = -2 
+and 𝛽 = 2. For each scenario, the simulation was conducted 10 times with pedestrians randomly 
+distributed within their allocated starting positions (holding areas , see figure 1 d-f in the main text ). 
+We report  mean value s across replicates alongside 1 s.d. The experimental data are the average 
+value for runs with the same initial conditions. 
+ 
+
+6 
+ 
+ 
+Figure S6: Sensitivity analysis for the model parameter  𝛽 which controls the relative weighting of 
+pedestrians avoiding crowded exits in their  initial route choice . Parameter calibration was 
+performed across all experimental runs in scenarios A, B and C. The simulations use 𝜃 = 0.5, 𝛿 = -2 
+and 𝛼 = 0. For each scenario, the simulation was conducted 10 times with pedestrians randomly 
+distributed within their allocated starting positions ( holding areas, see figure 1 d-f in the main text ). 
+We report mean values across replicates alongside 1 s.d. The experimental data are the average 
+value for runs with the same initial conditions. 
+ 
+
+7 
+ 
+ 
+ 
+Figure S7: Sensitivity analysis based on the quantity 𝑑𝑖𝑠𝑡 (see equation (3.3) in the main text) for 
+experiments A, B and C, respectively. The calibration of parameters was performed separately for 
+each scenario A, B and C and number of pedestrians , respectively. The values of the parameters 𝜃 
+and 𝛿 used in the simulations are listed in supplementary table S4  (see main text for additional 
+information on sensitivity analysis). 
+ 
+
+8 
+ 
+ 
+Figure S8: Sensitivity analysis for the model parameter 𝛽 which controls the relative weighting of 
+pedestrians avoiding crowded exits in their initial route choice. Parameter calibration  was 
+performed separately for each scenario A, B and C and number of pedestrians , respectively. The 
+parameter sets that minimised 𝑑𝑖𝑠𝑡 for each scenario are listed in supplementary table S4. For each 
+scenario, the simulation was conducted 10 times with pedestrians randomly distributed within their 
+allocated starting positions (holding areas , see figure 1d-f in the main text). We report mean values 
+across replicates alongside 1 s.d. The experimental data are the average value for runs with the same 
+initial conditions.  
+
+9 
+ 
+ 
+Figure S9: The calibration presented in the main text does not require simulations to capture the 
+number of pedestrians who used the exit closest to them. Here we illustrate the effect of taking this 
+into account by extending equation (3.3) in the main text: 
+𝑑𝑖𝑠𝑡 = √𝑑𝑖𝑠𝑡ExitUsage
+2 + 𝑑𝑖𝑠𝑡n
+2 + 𝑑𝑖𝑠𝑡Nearest
+2,                                    (S1) 
+where 𝑑𝑖𝑠𝑡Nearest is the averaged differences between experiments and simulations in the number 
+of pedestrians who egressed through the exit closest to their initial position. We also  extend the 
+range of parameter values, as the parameter values achieving the closest match to the experimental 
+data in our previous calibration sometimes  occurred at the boundary of their ranges (e.g. 𝛿 = -2, as 
+
+10 
+ 
+well as 𝛼 = 10 and 𝛽 = 10). We keep the range of values for 𝜃 and enlarge those of the other three 
+parameter values to: 𝛿 = (-30, -20, -15, -10, -5, -2), 𝛼 = (10, 12, 15, 20, 30) and 𝛽 = (10, 12, 15, 20, 
+30). We then calibrate the model parameters using the combined data from all experiments and 
+participant numbers based on the quantity 𝑑𝑖𝑠𝑡 shown in equation (S1). The set of parameters that 
+minimises 𝑑𝑖𝑠𝑡 is 𝜃 = 0.7, 𝛿 = -10, 𝛼 = 15 and 𝛽 = 30. This is in agreement with the results from 
+our previous calibration (𝜃 = 0.5, 𝛿 = -2, 𝛼 = 0 and 𝛽 = 2), insofar as suggesting a low frequency of 
+path re -planning behaviour  (𝜃 = 0.5 ), as well as a preference for wider exits ( 𝛿 < 0) and less 
+crowded exits ( 𝛽 > 0). However, this new calibration  also suggests that taking into account the 
+number of pedestrians who chose their  nearest exit, ensures that proximity to exits has to be 
+included into the model (𝛼 > 0). 
+  
+11 
+ 
+ 
+Figure S10: To demonstrate that our model is robust and can be extended to larger crowds, we 
+performed additional simulations with 𝑁 = 5000 agents. The scenario we considered is similar to 
+experiment B (figure 1e in the main text), but in a room with dimensions 30 m × 30 m. The left and 
+right hand exits are 2 m wide, and the top and bottom exits are 5 m wide. The parameter values used 
+here are 𝜃 = 0.15, 𝛿 = 0, 𝛼 = 8 and 𝛽 = 6. Panels show different time points in the simulation: ( a) 𝑡 
+= 0 s, (b) 𝑡 = 10 s, (c) 𝑡 = 50 s, ( d) 𝑡 = 130 s, (e) 𝑡 = 150 s and ( f) 𝑡 = 180 s. The speed of agents in 
+meters per second is presented according to  the colour scale. At the start of simulations, all 
+pedestrians are uniformly randomly distributed in the experimental layout ( a). Early in the 
+simulation the dynamics are dominated by individuals’ initial choice of route ( b,c). Dynamic route 
+choice processes can be observed in later stages of the simulation ( d-f). The distribution of 
+pedestrians over exits is indicated in  (f). As a result of dynamic route planning, the wider exits are 
+used more frequently which broadly agrees with our experimental findings. 
+ 
+
+12 
+ 
+ 
+Figure S11: Illustration of path re -planning behaviour observed in experiments. Snapshots for 
+experiment B_6 at ( a) 𝑡 = 9 s, ( b) 𝑡 = 13 s, ( c) 𝑡 = 15 s and ( d) 𝑡 = 18 s. The yellow circles mark 
+pedestrians with path re-planning behaviour based on jam-avoidance. Jams are observed in front of 
+exits when the total number of the participants is large enough. Pedestria ns in front of exits may 
+have to wait in or near the jams for some time. In this situation, a number of the pedestrians who 
+arrive late into the jam may become impatient and try to search for other exits with shorter jams. (a) 
+The yellow-marked pedestrians are waiting at their original ly chosen exits. (b) After 4 s t hey are 
+looking for new target exit with longer path length but smaller jam size (discernible from head-turns, 
+difficult to see in the image). (c) Subsequently, they start to move towards a new target exit after 2 s 
+and they reach their new target exit 3 s later (d). 
+ 
+
+13 
+ 
+ 
+Figure S12: Illustration of path re -planning behaviour observed in experiments. Snapshots for the 
+experiment A_1 at (a) 𝑡 = 8 s, (b) 𝑡 = 11 s, (c) 𝑡 = 12 s, (d) 𝑡 = 15 s, (e) 𝑡 = 16 s and (f) 𝑡 = 17 s. The 
+yellow, blue and red circles mark pedestrians with path re -planning behaviour who appear to 
+display a range of behaviours, including time-estimating behaviour, following behaviour and route-
+comparing behaviour. 
+
+14 
+ 
+By ‘time-estimating behaviour’ we mean an anticipation of jam -avoidance behaviour. Pedestrians 
+try to estimate the overall time they need to exit through the target exit before they arrive there. If 
+this estimated time is longer than a reference time , the ped estrian might change the ir route. An 
+example is given here, where the yellow -marked pedestrian appears to estimate these times when 
+approaching the left -hand exit in the image  (a,b), and then changed the ir decision to another exit 
+before getting stuck in the jam in front of the original target exit (c,d). 
+By ‘following behaviour’ we mean that a pedestrian might change the ir route choice because of 
+other pedestrians. This phenomenon could be caused by following a family member or a friend to 
+stay together. For example, in video recordings we observed that a man in a couple persuaded the 
+woman to follow him when changing his route. Moreover, this phenomenon could also be caused 
+by following a stranger to minimize the evacuation time. An example is given here, where the blue-
+marked pedestrian appears to follow the yellow-marked pedestrian (c,d). 
+It appears that  people show different degrees of ‘route-comparing behaviour ’ during their 
+movement. Pedestrians with a higher sense of competition  may continue to  compare exit routes 
+even if they are already very close to an exit. An example for this behaviour could be  given by the 
+red-marked pedestrian who i s comparing the left and right exits until he almost arrived at the 
+original target exit (based on head turn s, a-e). Presumably based on a last-minute comparison, this 
+pedestrian changes their route choice when already very close to an exit (f). 
+  
+15 
+ 
+2. Additional Tables 
+ 
+Table S1: The initial conditions for each run of experiments A, B and C, respectively. 𝑤left, 𝑤right, 
+𝑤up and 𝑤down are the widths of the left, right, top and bottom exits, respectively. 𝑁I and 𝑁II are 
+the number of participants in the holding area I and II, respectively. The difference between C_1 
+and C_2 is only 4 participants in 𝑁I. Thus these two runs are regarded to have the same initial 
+conditions (𝑁I = 69 persons) in the following analysis. 
+Index 𝑁I [persons] 𝑁II [persons] 𝑤left [m] 𝑤right [m] 𝑤up [m] 𝑤down [m] 
+A_1 ~ A_2 18 0 0.7 1.1 - - 
+A_3 ~ A_8 40 0 0.7 1.1 - - 
+A_9 ~ A_10 48 90 0.7 1.1 - - 
+B_1 11 0 0.8 0.8 0.8 0.8 
+B_2 ~ B_4 40 0 0.8 0.8 0.8 0.8 
+B_5 ~ B_6 0 138 0.8 0.8 1.2 1.2 
+C_1 67 0 0.8 0.8 - - 
+C_2 71 0 0.8 0.8 - - 
+C_3 90 48 0.8 1.2 - - 
+ 
+  
+16 
+ 
+Table S2: The mean 𝑇̅ and standard deviation 𝜎𝑇̅ of the egress time 𝑇 (see supplementary figure S1) 
+for runs with the same initial conditions  of experiments A, B and C, respectively . 𝑁 is the total 
+number of participants in each run. 
+Index 𝑁 [persons] 𝑇̅ [s] 𝜎𝑇̅ [s] 
+A_1 ~ A_2 18 13.6 0.1 
+A_3 ~ A_8 40 19.6 1.6 
+A_9 ~ A_10 138 44.4 1.1 
+B_1 11 7.8 - 
+B_2 ~ B_4 40 14.2 0.7 
+B_5 ~ B_6 138 27.0 1.8 
+C_1 ~ C_2 69 33.4 3.0 
+C_3 138 50.1 - 
+ 
+             
+17 
+ 
+Table S3: The time-related information about the pedestrians with path re-planning behaviour for 
+each run of experiments A, B and C, respectively. 𝑡𝑖 is the egress time for pedestrian 𝑖. 𝑡𝑖𝑐 is the 
+time until pedestrian 𝑖 changed her route. 𝑟 is the ratio of 𝑡𝑖𝑐 to 𝑡𝑖: 𝑟 = 𝑡𝑖𝑐 𝑡𝑖⁄ . The mean values of 𝑡𝑖 
+and 𝑡𝑖𝑐 for each run of experiments A, B and C are plotted in supplementary figure S2.
+ 
+Index 𝑡𝑖 [s] 𝑡𝑖𝑐 [s] 𝑟 [%] 
+A_1 - - - 
+A_2 - - - 
+A_3 
+8.6 
+9.0 
+10.8 
+3.8 
+4.8 
+8.4 
+44.2 
+53.5 
+77.9 
+A_4 - - - 
+A_5 8.6 5.3 61.6 
+A_6 - - - 
+A_7 8.2 2.9 35.1 
+A_8 - - - 
+A_9 
+22.9 
+25.4 
+23.4 
+24.2 
+11.9 
+11.5 
+12.8 
+19.9 
+21.4 
+2.8 
+50.1 
+50.1 
+85.1 
+88.1 
+23.2 
+A_10 
+21.9 
+25.6 
+10.6 
+6.5 
+15.1 
+4.9 
+29.7 
+58.8 
+46.7 
+ 
+ 
+Index 𝑡𝑖 [s] 𝑡𝑖𝑐 [s] 𝑟 [%] 
+B_1 - - - 
+B_2 - - - 
+B_3 
+11.2 
+11.9 
+11.9 
+5.9 
+5.9 
+7.8 
+52.2 
+49.5 
+64.9 
+B_4 
+10.2 
+13.8 
+6.8 
+8.7 
+66.5 
+62.9 
+B_5 
+20.9 
+21.1 
+15.3 
+19.3 
+20.9 
+10.9 
+11.2 
+4.9 
+5.6 
+7.1 
+52.1 
+53.0 
+32.2 
+28.8 
+34.1 
+B_6 
+19.4 
+21.3 
+18.6 
+16.3 
+19.0 
+16.3 
+19.5 
+6.2 
+17.4 
+12.4 
+9.9 
+13.1 
+11.2 
+13.1 
+31.8 
+81.8 
+66.8 
+60.9 
+68.8 
+68.6 
+67.0 
+ 
+ 
+Index 𝑡𝑖 [s] 𝑡𝑖𝑐 [s] 𝑟 [%] 
+C_1 
+5.9 
+6.0 
+7.2 
+3.1 
+2.9 
+5.1 
+51.6 
+49.0 
+69.8 
+C_2 
+9.0 
+10.4 
+10.4 
+4.8 
+5.7 
+4.9 
+52.8 
+54.5 
+47.6 
+C_3 
+14.9 
+16.5 
+16.4 
+19.2 
+12.2 
+8.2 
+8.6 
+4.9 
+10.9 
+9.9 
+17.2 
+4.5 
+4.6 
+6.4 
+33.2 
+65.9 
+60.5 
+89.6 
+36.7 
+56.5 
+74.6 
+ 
+ 
+18 
+ 
+Table S 4: The results of parameter calibration in experiments A, B and C  with different number s of 
+pedestrians 𝑁, respectively. The parameter sets listed in this table minimised  the quantity 𝑑𝑖𝑠𝑡 (see main 
+text) for each scenario, respectively. 
+Scenario 𝑁 𝜃 𝛿 𝛼 𝛽 
+A 18 0.5 -1 0 4 
+A 40 0.9 -2 2 0 
+A 138 0.5 -2 0 10 
+B 11 0.7 0.5 10 10 
+B 40 0.05 2 2 8 
+B 138 0.15 -2 2 4 
+C 69 0.3 0.1 0 10 
+C 138 0.3 -2 0 0 
+ 
+ 
+             
+19 
+ 
+3. JuPedSim – an open pedestrian simulation framework 
+ 
+All modelling and simulation tasks presented in this manuscript have been performed in the Jü lich 
+Pedestrian Simulator (JuPedSim). JuPedSim is a framework, mostly written in C++, for modelling and 
+simulating pedestrian egress. It works in a 3 -dimensional continuous environment. JuPedSim implements 
+state of the art models and analysis methods. It is constructed around three loosely couple d software  
+engines: a simulation engine, a visualisation engine and a reporting engine. We will briefly describe these 
+three engines in the following. 
+The simulation engine simulates the movement of pedestrians given a geometry (e.g. room layout)  and 
+an initial configuration. The initial configuration includes the desired destinations, speeds, route choices 
+and other demographic parameters about pedestrians such as the size and gender. The simulation modules 
+implemented follow the strategic/tactical/operation levels paradigm for route choice at different spatio -
+temporal levels [S4] and allows the rapid prototyping of new models.  
+Three models at the tactical level (route choice, short term decisions) are already implemented in the 
+framework: a shortest path strategy using the Dijkstra algorithm, a quickest path based on visibility and 
+jam avoidance and a cognitive map, giving agents the possibility to explore the environment and discover 
+doors for instance [S1]. In addition, some behavioural features are implemented, such as the possibility to 
+share information about closed doors with other agents and the ability to explore an u nknown 
+environment when looking for an exit.  
+On the operational level (locomotion system, collision avoidance) JuPedSim implements three different 
+force-based models: The ‘Generalized Centrifugal Force Model ’ [S5], the ‘Gompertz model’ [S3] and a 
+collision free first order model [S 2]. The Gompertz model is based on a continuous physical force. 
+Depending on the chosen parameter, the model simulates social , as well as physical forces , in a 
+continuous way. This is in contrast to other known physical forces which are defined as a step-function to 
+hinder excessive overlapping of pedestrians. All inputs follow a normal distribution. 
+The reporting engine analyses the trajectories from simulations or any other sources , such as empirical 
+data. The mod ule integrates four measurement methods. Possible analyses include pedestrian densities, 
+velocities and flows in a given geometry. 
+The visualisation engine  reads a file containing the simulation results (coordinates, velocities, 
+orientations) together with geometry information and allows the user to interact with this information in 
+form of an animation, for instance focusing on an area of interest or masking views. It can also be used in 
+an online mode, where simulation results are directly streamed to the application. 
+JuPedSim emphasises the validation of the implemented models. The empirical data used for the 
+validation come from numerous experiments that have been organized in different geometries. All inputs 
+20 
+ 
+and output files are XML based. JuPedSim is platform-independent and released under the LGPL License. 
+In the following sections, we provide additional details about the modelling component s presented in the 
+main manuscript.  For all additional parameters that are not reported in the main text, we use default 
+values that can be found in reference [S3]. 
+ 
+3.1 Visibility criteria 
+In many steps during the route choice process, the visibility between pedestrians and/or exits is computed. 
+The inter-pedestrian visibility is determined by drawing a straight line joining the centre of both 
+pedestrians and computing i f this line intersects with other pedestrians or obstacles. Pedestrians are 
+represented as circles with pre -defined radii. If desired, o ne could define pedestrians with different 
+demographics parameters, relating to their  size or desired velocity. All obstacles (e.g. walls) are 
+represented by closed polygons. For visibility between a pedestrian and an exit, we consider the line 
+between the centre of the  exit and the centre of the pedestrian and check for occlusion with other 
+pedestrians and/or obstacles. In this procedure, pedestrians queuing in front of the exit for which visibility 
+is assessed are not considered (assuming that under these conditions, t he queue in front of an exit is as 
+informative as seeing the exit itself). 
+ 
+3.2 Selection of a reference pedestrian 
+When pedestrians are stuck in a jam or when they enter a new location (e.g. after passing through an exit), 
+they select a reference pedestrian and estimate their new travel time. We define a pedestrian to be in a jam 
+if his/her desired speed is not achieved. The selection  of reference pedestrians is completed in two steps. 
+First, the appropriate queues for the relevant exits are identified. Th e queues are made up of pedestrians 
+who have the same destination, such as an exit door . For pedestrians to be eligible to be selected as 
+reference pedestrians, they  must be closer to th is immediate destination than the pedestrian performing 
+the estimation. In the s econd step, a reference pedestrian is selected from that queue by identifying the 
+closest pedestrian in the visibility range  of the pedestrian performing the estimation . The trav el time is 
+then estimated using equation (3.1) presented in the main manuscript. 
+ 
+3.3 Operational model 
+The operational model which controls the locomotion and collision avoidance of pedestrians in our 
+simulations is a first order velocity based model: 
+𝑋̇𝑖 = 𝑉 (𝑠𝑖(𝑋𝑖, 𝑋𝑗, … ) ×  𝑒𝑖(𝑋𝑖, 𝑋𝑗, … )).                                                  (S2) 
+ 
+21 
+ 
+𝑉 is a piecewise linear function defining the optimal velocity which guarantees a collision -free minimal 
+spacing in front of the pedestrian. 𝑠𝑖 is the minimal space between a pedestrian and those in front of 
+him/her. 𝑒𝑖 defines the direction of the pedestrian (see equation (S2)), which is a combination of the 
+desired direction 𝑒0 given by the route choice model presented in the main manuscript  and the relative 
+vectors to other pedestrians in the walking direction. In this equation, 𝑁 is a normalisation coefficient to 
+ensure that 𝑒𝑖 is a unit vector and 𝑅 is a repulsive function which exponentially decays with increasing 
+spacing with pedestr ians in the front. This approach is a simplified version of the gradient navigation 
+model [S6]. 
+𝑒𝑖(𝑋𝑖, 𝑋𝑗, … )𝑖 =
+1
+𝑁 (𝑒0 + ∑ 𝑅 (𝑆𝑖, 𝑗) 𝑒𝑖, 𝑗𝑗 )                                                (S3) 
+The two equations ensure a collision -free movement of pe destrians. More details on th is models are 
+presented in [S2]. 
+  
+22 
+ 
+4. Experimental data on pedestrian trajectories 
+ 
+Pedestrian trajectories for 10 runs in experiment A, 6 runs in experiment B and 3 runs in experiment C are 
+provided in the supplementary files ‘trajectory_A.txt’, ‘trajectory_B.txt’ and ‘trajectory_C.txt’, 
+respectively. Five columns are listed in each file. 
+- The first column is entitled ‘ID’, which represents the pedestrian ID in each run. 
+- The second column is entitled ‘Frame’, which records the current frame of each pedestrian. The frame 
+rate for all experimental runs is 16 per second. 
+- The third and fourth  columns are entitled ‘X [m]’ and ‘Y [m]’, which represent the pedestrian 
+coordinates in metres. The coordinates of the origin (0,0) in experim ents A, B and C are marked by 
+the blue cross in figure 1d-f in the main text, respectively. 
+- The last column is entitled ‘Choice of exit’, which illustrates pedestrians’ target exits in each frame. 
+In experiment A and C, ‘1’ represents the left exit and ‘2’ represents the right one;  in experiment B, 
+‘1’, ‘2’, ‘3’ and ‘4’ represent the left, right, top and bottom exit s, respectively (see figure 1d-f in the 
+main text). ‘0’ represents that pedestrians have not made a decision. 
+ 
+ 
+  
+23 
+ 
+References 
+[S1] Haensel D. 2014 A knowledge-based routing framework for pedestrian dynamics  simulation. Master thesis, 
+Technische Universitä t Dresden, November 2014. 
+[S2] Tordeux A , Chraibi M, Seyfried A. 2016 Collision-free speed model for pedestrian dynamics. In Traffic and 
+Granular Flow’15, 28-30 October, Delft, Netherlands. 
+[S3] Kemloh Wagoum AU, Chraibi M, Zhang J. 2015 JuPedSim: a n open framework for simulating and analyzing 
+the dynamics of pedestrians. In 3rd Conference of Transportation Research Group of India, 17 -20 December, 
+Kolkata, India. 
+[S4] Hoogendoorn SP, Bovy PHL , Daamen W. 2002 Microscopic pedestrian wayfinding and dynamics modelling. 
+In Pedestrian and Evacuation Dynamics 2002, pp. 123-155. 
+[S5] Chraibi M, Kemloh Wagoum AU,  Seyfried A, Schadschneider A. 2011 Force-based models of pedestrian 
+dynamics. Networks and Heterogeneous Media 6, 425-442. (doi:10.3934/nhm.2011.6.425) 
+[S6] Dietrich F, Kö ster G. 2014 Gradient navigation model for pedestrian dynamics. Physical Review E 89, 062801. 
+(doi:10.1103/PhysRevE.89.062801) 

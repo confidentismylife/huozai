@@ -1,0 +1,124 @@
+{
+  "files": [
+    {
+      "id": 7623691,
+      "name": "rsif20160684_si_001.pdf",
+      "size": 2101818,
+      "is_link_only": false,
+      "download_url": "https://ndownloader.figshare.com/files/7623691",
+      "supplied_md5": "13e3e8616c92c54950efd17a1d5f9cb1",
+      "computed_md5": "13e3e8616c92c54950efd17a1d5f9cb1",
+      "mimetype": "application/pdf"
+    }
+  ],
+  "folder_structure": {},
+  "authors": [
+    {
+      "id": 3725926,
+      "full_name": "Weichen Liao",
+      "first_name": "Weichen",
+      "last_name": "Liao",
+      "is_active": false,
+      "url_name": "_",
+      "orcid_id": ""
+    },
+    {
+      "id": 3321816,
+      "full_name": "Armel U. Kemloh Wagoum",
+      "first_name": "Armel U.",
+      "last_name": "Kemloh Wagoum",
+      "is_active": false,
+      "url_name": "_",
+      "orcid_id": ""
+    },
+    {
+      "id": 468679,
+      "full_name": "Nikolai W. F. Bode",
+      "first_name": "Nikolai",
+      "last_name": "W. F. Bode",
+      "is_active": false,
+      "url_name": "_",
+      "orcid_id": ""
+    }
+  ],
+  "custom_fields": [],
+  "figshare_url": "https://rs.figshare.com/articles/journal_contribution/Supplementary_information_for_Route_choice_in_pedestrians_determinants_for_initial_choices_and_revising_decisions_/4630006",
+  "download_disabled": false,
+  "description": "Here we present supplementary information for the article “Route choice in pedestrians: determinants for initial choices and revising decisions” published in Journal of the Royal Society Interface.",
+  "funding": null,
+  "funding_list": [],
+  "version": 2,
+  "status": "public",
+  "size": 4205431,
+  "created_date": "2017-02-21T06:48:09Z",
+  "modified_date": "2026-02-18T14:45:19Z",
+  "is_public": true,
+  "is_confidential": false,
+  "is_metadata_record": false,
+  "confidential_reason": "",
+  "metadata_reason": "",
+  "license": {
+    "value": 1,
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  "tags": [
+    "route choice",
+    "decision-making",
+    "pedestrian experiment",
+    "crowd behaviour",
+    "collective behaviour",
+    "evacuation simulation"
+  ],
+  "keywords": [
+    "route choice",
+    "decision-making",
+    "pedestrian experiment",
+    "crowd behaviour",
+    "collective behaviour",
+    "evacuation simulation"
+  ],
+  "categories": [],
+  "references": [
+    "https://doi.org/10.1098/rsif.2016.0684"
+  ],
+  "has_linked_file": false,
+  "citation": "Liao, Weichen; Kemloh Wagoum, Armel U.; W. F. Bode, Nikolai (2017). Supplementary information for “Route choice in pedestrians: determinants for initial choices and revising decisions”. The Royal Society. Journal contribution. https://doi.org/10.6084/m9.figshare.4630006.v2",
+  "related_materials": [
+    {
+      "id": 12717185,
+      "identifier": "10.1098/rsif.2016.0684",
+      "title": "Route choice in pedestrians: determinants for initial choices and revising decisions",
+      "relation": "IsSupplementTo",
+      "identifier_type": "DOI",
+      "is_linkout": true,
+      "link": "https://doi.org/10.1098/rsif.2016.0684"
+    }
+  ],
+  "is_embargoed": false,
+  "embargo_date": null,
+  "embargo_type": null,
+  "embargo_title": "",
+  "embargo_reason": "",
+  "embargo_options": [],
+  "id": 4630006,
+  "title": "Supplementary information for “Route choice in pedestrians: determinants for initial choices and revising decisions”",
+  "doi": "10.6084/m9.figshare.4630006.v2",
+  "handle": "",
+  "url": "https://api.figshare.com/v2/articles/4630006",
+  "published_date": "2017-02-21T06:48:09Z",
+  "thumb": "https://s3-eu-west-1.amazonaws.com/ppreviews-rs-5954818599357/7623691/thumb.png",
+  "defined_type": 6,
+  "defined_type_name": "journal contribution",
+  "group_id": 5733,
+  "url_private_api": "https://api.figshare.com/v2/account/articles/4630006",
+  "url_public_api": "https://api.figshare.com/v2/articles/4630006",
+  "url_private_html": "https://figshare.com/account/articles/4630006",
+  "url_public_html": "https://rs.figshare.com/articles/journal_contribution/Supplementary_information_for_Route_choice_in_pedestrians_determinants_for_initial_choices_and_revising_decisions_/4630006",
+  "timeline": {
+    "posted": "2017-02-21T06:48:09",
+    "firstOnline": "2017-02-08"
+  },
+  "resource_title": "Route choice in pedestrians: determinants for initial choices and revising decisions",
+  "resource_doi": "10.1098/rsif.2016.0684"
+}

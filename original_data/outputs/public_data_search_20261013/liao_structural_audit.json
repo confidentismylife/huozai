@@ -1,0 +1,180 @@
+{
+  "note": "Structural intake only. Changes computed from nonzero annotated exit labels; not a validated prediction cohort. Frame counts are not independent people.",
+  "rows": 195547,
+  "runs": 19,
+  "person_run_records": 1235,
+  "changed_person_runs": 41,
+  "details": [
+    {
+      "run": "A_1",
+      "person_run_records": 18,
+      "changed_between_nonzero_labels": 0,
+      "label_transitions": 0,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    },
+    {
+      "run": "A_2",
+      "person_run_records": 18,
+      "changed_between_nonzero_labels": 0,
+      "label_transitions": 0,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    },
+    {
+      "run": "A_3",
+      "person_run_records": 40,
+      "changed_between_nonzero_labels": 3,
+      "label_transitions": 3,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    },
+    {
+      "run": "A_4",
+      "person_run_records": 40,
+      "changed_between_nonzero_labels": 0,
+      "label_transitions": 0,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    },
+    {
+      "run": "A_5",
+      "person_run_records": 40,
+      "changed_between_nonzero_labels": 1,
+      "label_transitions": 1,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    },
+    {
+      "run": "A_6",
+      "person_run_records": 40,
+      "changed_between_nonzero_labels": 0,
+      "label_transitions": 0,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    },
+    {
+      "run": "A_7",
+      "person_run_records": 40,
+      "changed_between_nonzero_labels": 1,
+      "label_transitions": 1,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    },
+    {
+      "run": "A_8",
+      "person_run_records": 40,
+      "changed_between_nonzero_labels": 0,
+      "label_transitions": 0,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    },
+    {
+      "run": "A_9",
+      "person_run_records": 138,
+      "changed_between_nonzero_labels": 5,
+      "label_transitions": 5,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    },
+    {
+      "run": "A_10",
+      "person_run_records": 138,
+      "changed_between_nonzero_labels": 3,
+      "label_transitions": 3,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    },
+    {
+      "run": "B_1",
+      "person_run_records": 11,
+      "changed_between_nonzero_labels": 0,
+      "label_transitions": 0,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    },
+    {
+      "run": "B_2",
+      "person_run_records": 40,
+      "changed_between_nonzero_labels": 0,
+      "label_transitions": 0,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    },
+    {
+      "run": "B_3",
+      "person_run_records": 40,
+      "changed_between_nonzero_labels": 3,
+      "label_transitions": 3,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    },
+    {
+      "run": "B_4",
+      "person_run_records": 40,
+      "changed_between_nonzero_labels": 2,
+      "label_transitions": 2,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    },
+    {
+      "run": "B_5",
+      "person_run_records": 138,
+      "changed_between_nonzero_labels": 3,
+      "label_transitions": 4,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    },
+    {
+      "run": "B_6",
+      "person_run_records": 138,
+      "changed_between_nonzero_labels": 7,
+      "label_transitions": 7,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    },
+    {
+      "run": "C_1",
+      "person_run_records": 67,
+      "changed_between_nonzero_labels": 3,
+      "label_transitions": 3,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    },
+    {
+      "run": "C_2",
+      "person_run_records": 71,
+      "changed_between_nonzero_labels": 3,
+      "label_transitions": 3,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    },
+    {
+      "run": "C_3",
+      "person_run_records": 138,
+      "changed_between_nonzero_labels": 7,
+      "label_transitions": 7,
+      "frame_gaps": 0,
+      "duplicate_frames": 0,
+      "unordered_people": 0
+    }
+  ]
+}

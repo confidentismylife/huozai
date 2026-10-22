@@ -1,0 +1,44 @@
+[
+  {
+    "name": "bode_processed.zip",
+    "url": "https://datadryad.org/downloads/file_stream/857",
+    "status": "error",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
+    "name": "bode_processed_readme.txt",
+    "url": "https://datadryad.org/downloads/file_stream/858",
+    "status": "error",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
+    "name": "bode_raw_readme.txt",
+    "url": "https://datadryad.org/downloads/file_stream/856",
+    "status": "error",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
+    "name": "coach_page.html",
+    "url": "https://link.springer.com/article/10.1007/s10694-022-01253-y",
+    "bytes": 559083,
+    "type": "text/html; charset=utf-8",
+    "sha256": "75a2eece322e94e12fa880e5e0c665dbcee4a0944ec2cf0bdf59b99e4833cee7",
+    "status": "saved"
+  },
+  {
+    "name": "queuing_page.html",
+    "url": "https://datadryad.org/dataset/doi:10.5061/dryad.m5sd2",
+    "bytes": 33571,
+    "type": "text/html; charset=utf-8",
+    "sha256": "a7f7a9f2ad24e6d20cfd9e229f12bac4908d96b4d5fd20553c9b4079ebcdda8b",
+    "status": "saved"
+  },
+  {
+    "name": "crowd_management_page.html",
+    "url": "https://ped.fz-juelich.de/da/doku.php?id=2021crowd_management",
+    "bytes": 11180,
+    "type": "text/html; charset=utf-8",
+    "sha256": "702dad383e6ba4c4cf7f0a4abb8226fff8e25c021f97642b3df3b22a5f7da4c1",
+    "status": "saved"
+  }
+]
