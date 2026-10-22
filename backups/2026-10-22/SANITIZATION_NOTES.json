@@ -1,0 +1,78 @@
+[
+  {
+    "path": "workspace/.runtime/go/src/archive/tar/testdata/issue10968.tar",
+    "note": "invalid_tar_fixture_raw_scanned"
+  },
+  {
+    "path": "workspace/.runtime/go/src/archive/tar/testdata/issue11169.tar",
+    "note": "invalid_tar_fixture_raw_scanned"
+  },
+  {
+    "path": "workspace/.runtime/go/src/archive/tar/testdata/issue12435.tar",
+    "note": "invalid_tar_fixture_raw_scanned"
+  },
+  {
+    "path": "workspace/.runtime/go/src/archive/tar/testdata/pax-bad-hdr-file.tar",
+    "note": "invalid_tar_fixture_raw_scanned"
+  },
+  {
+    "path": "workspace/.runtime/go/src/archive/tar/testdata/pax-path-hdr.tar",
+    "note": "invalid_tar_fixture_raw_scanned"
+  },
+  {
+    "path": "workspace/.runtime/go/src/archive/tar/testdata/writer-big.tar",
+    "note": "invalid_tar_fixture_raw_scanned"
+  },
+  {
+    "path": "workspace/.runtime/go/src/archive/zip/testdata/test-badbase.zip",
+    "note": "invalid_archive_fixture_raw_scanned",
+    "error": "BadZipFile"
+  },
+  {
+    "path": "workspace/.runtime/go/src/archive/zip/testdata/test-baddirsz.zip",
+    "note": "invalid_archive_fixture_raw_scanned",
+    "error": "BadZipFile"
+  },
+  {
+    "path": "workspace/.runtime/go1.27.2.windows-amd64.zip::go/src/archive/tar/testdata/issue10968.tar",
+    "note": "invalid_tar_fixture_raw_scanned"
+  },
+  {
+    "path": "workspace/.runtime/go1.27.2.windows-amd64.zip::go/src/archive/tar/testdata/issue11169.tar",
+    "note": "invalid_tar_fixture_raw_scanned"
+  },
+  {
+    "path": "workspace/.runtime/go1.27.2.windows-amd64.zip::go/src/archive/tar/testdata/issue12435.tar",
+    "note": "invalid_tar_fixture_raw_scanned"
+  },
+  {
+    "path": "workspace/.runtime/go1.27.2.windows-amd64.zip::go/src/archive/tar/testdata/pax-bad-hdr-file.tar",
+    "note": "invalid_tar_fixture_raw_scanned"
+  },
+  {
+    "path": "workspace/.runtime/go1.27.2.windows-amd64.zip::go/src/archive/tar/testdata/pax-path-hdr.tar",
+    "note": "invalid_tar_fixture_raw_scanned"
+  },
+  {
+    "path": "workspace/.runtime/go1.27.2.windows-amd64.zip::go/src/archive/tar/testdata/writer-big.tar",
+    "note": "invalid_tar_fixture_raw_scanned"
+  },
+  {
+    "path": "workspace/.runtime/go1.27.2.windows-amd64.zip::go/src/archive/zip/testdata/test-badbase.zip",
+    "note": "invalid_archive_fixture_raw_scanned",
+    "error": "BadZipFile"
+  },
+  {
+    "path": "workspace/.runtime/go1.27.2.windows-amd64.zip::go/src/archive/zip/testdata/test-baddirsz.zip",
+    "note": "invalid_archive_fixture_raw_scanned",
+    "error": "BadZipFile"
+  },
+  {
+    "path": "workspace/outputs/_smoke_confirmatory_joint_control/models/seed_13_rule_advice_ppo.zip::policy.pth::archive/data/4",
+    "note": "invalid_gzip_raw_scanned"
+  },
+  {
+    "path": "workspace/outputs/dynamic_llm_rl_v2/models/ppo.zip::policy.optimizer.pth::archive/data/26",
+    "note": "invalid_gzip_raw_scanned"
+  }
+]

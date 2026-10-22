@@ -1,0 +1,37 @@
+{
+  "snapshot_date": "2026-10-22",
+  "scope": "complete existing project workspace and saved user-visible conversation",
+  "totals": {
+    "files": 88587,
+    "source_bytes": 12621819253,
+    "export_bytes": 12621268941,
+    "modified_files": 12
+  },
+  "conversation_messages": 2002,
+  "redactions": {
+    "private_key": 12,
+    "service_key": 11,
+    "credential_assignment": 3
+  },
+  "excluded_path_count": 3,
+  "archive_fixture_notes": 18,
+  "workspace_redactions": {
+    "private_key": 12,
+    "service_key": 3,
+    "credential_assignment": 11
+  },
+  "redaction_refinement": {
+    "rechecked_files": 25,
+    "restored_false_positive_files": 9,
+    "policy": "strict provider key formats; private-key blocks and credential assignments"
+  },
+  "credential_files_excluded_after_audit": 4,
+  "independent_audit": {
+    "files_checked": 88643,
+    "bytes_checked": 12929102403,
+    "extra_redacted_files": [],
+    "redactions": {},
+    "manifest_hashes_checked": 88587,
+    "status": "passed"
+  }
+}
