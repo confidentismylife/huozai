@@ -1,0 +1,76 @@
+{
+  "version": "1.0",
+  "question": "Under the archived public hotel hazard field, compare distance routing, the stored author policy, current-snapshot replanning, and a full-future minimum-dose reference.",
+  "source_directory": "outputs/safestep_paper_numerics_20261015/author_repository",
+  "output_directory": "outputs/safestep_public_benchmark_20261017",
+  "primary_departure_fire_s": 300,
+  "departure_fire_times_s": [200, 250, 300, 350, 400, 450, 500, 550, 600],
+  "starts": "Every nonexit movement cell in the archived author ordering; 61 expected",
+  "movement": {
+    "grid_step_m": 2.0,
+    "speed_m_per_s": 0.3,
+    "maximum_actions": 45,
+    "action_order": ["left", "right", "up", "down"],
+    "common_constraint": "Only legal cardinal moves; apply common legal mask to stored DQN; no wait action; revisits allowed",
+    "terminal": "First arrival at either graph stair-exit cell",
+    "exposure_threshold_stopping": false
+  },
+  "scoring": {
+    "primary": "Integrate piecewise-linear public FER during each departure-cell residence interval; charge initial interval once; stop on first exit arrival; no pre-departure exposure",
+    "legacy_secondary": "Author compatibility only: initial cell plus subsequent nonexit cells, floor to 5-second samples, fixed movement duration",
+    "minimum_FED_reference_objective": "Reach an exit within 45 legal moves, minimize FED, break exact risk ties by fewer moves then action order",
+    "original_reward_equivalence_claim": false,
+    "failure_handling": "Report failures separately; never treat their partial FED as a successful low-dose result; pairwise outcome comparisons use jointly reached cases"
+  },
+  "methods": [
+    {
+      "id": "nearest_exit",
+      "role": "distance baseline",
+      "information": "Map and current position; no gas observations or future hazard input",
+      "objective": "Fewest legal moves to either exit; action-order tie break"
+    },
+    {
+      "id": "author_DQN_legal_mask",
+      "role": "archived fixed policy",
+      "information": "Current position only at inference; prior training exposure and budget not independently recovered; weights unchanged",
+      "objective": "Stored Q argmax after applying the common legal-action mask"
+    },
+    {
+      "id": "current_snapshot_replan",
+      "role": "current-information planning baseline",
+      "information": "Map, current position, exact current FER across all public regions; no future rows",
+      "objective": "Recompute minimum-dose snapshot path each movement step, treating current FER as stationary; fewer-move tie break"
+    },
+    {
+      "id": "full_future_minFED_reference",
+      "role": "privileged diagnostic reference, not online fair competitor",
+      "information": "Full future public FER for the entire finite horizon",
+      "objective": "Backward dynamic programming on time-expanded graph for minimum cumulative FED, then fewer moves"
+    }
+  ],
+  "reporting": {
+    "primary_results": "61 starts at the already studied 300-second departure",
+    "transfer_results": "Eight other departure times, 61 starts each; same building, same fire, same checkpoint; descriptive transfer diagnostics",
+    "outcomes": ["arrival rate", "FED", "travel time", "path length", "revisits", "dose excess over future reference", "raw DQN illegal argmax counts", "legacy FED sensitivity"],
+    "paired_tolerance_FED": 1e-10,
+    "inferential_statistics": "None; 549 start-time combinations are not 549 independent fires",
+    "safety_claim": "Graph arrival and a gas-dose metric do not validate real-building evacuation safety"
+  },
+  "verification": {
+    "unit_checks": "Analytic linear integrals, terminal charging, tiny exhaustive-path comparison, current-snapshot behavior, horizon failure",
+    "known_route_checks": "Four archived routes reproduce previous same-residence and legacy FED values",
+    "stored_policy_check": "At 300 seconds verify all 61 paths against archived stored-policy diagnostic",
+    "independent_reference_check": "Forward time-expanded shortest path on four fixed starts at every departure must match backward minimum FED",
+    "rollout_reference_check": "Every successful evaluated route has FED >= corresponding future minimum within tolerance"
+  },
+  "scope": {
+    "new_training_updates": 0,
+    "new_FDS_runs": 0,
+    "new_LLM_or_API_requests": 0,
+    "sealed_final48_scenarios_access": false,
+    "training_budget_matched_claim": false,
+    "equal_observation_information_claim": false,
+    "fit_parameters_to_paper_endpoint": false,
+    "new_model_or_building_generalization_claim": false
+  }
+}

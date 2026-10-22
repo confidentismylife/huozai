@@ -1,0 +1,83 @@
+{
+  "version": "1.0",
+  "date_local": "2026-10-18",
+  "question": "Can a fixed, past-only local linear FER forecast improve receding-horizon routing over last-observation snapshot routing in the already inspected public SafeStep fire?",
+  "evidence_status": "Development / method feasibility on one already inspected fire; no new independent confirmation data",
+  "source_directory": "outputs/safestep_paper_numerics_20261015/author_repository",
+  "previous_benchmark": "outputs/safestep_public_benchmark_20261017",
+  "output_directory": "outputs/safestep_causal_forecast_20261018",
+  "primary_departure_fire_s": 300,
+  "departure_fire_times_s": [200, 250, 300, 350, 400, 450, 500, 550, 600],
+  "starts": "All 61 archived nonexit movement cells, equally weighted within departure",
+  "movement": {
+    "dt_s": 6.666666666666667,
+    "grid_step_m": 2.0,
+    "maximum_actions": 45,
+    "constraints": "Same legal cardinal moves, first exit arrival terminal, no wait, revisits allowed; shrinking remaining horizon 45-k for all online methods",
+    "incapacitation_threshold_stopping": false
+  },
+  "observations": {
+    "native_interval_s": 5,
+    "available": "Exact global region FER native rows timestamp <= decision time; retain native timestamps; never interpolate an online measurement with a later row",
+    "predeparture_history": "All methods may access the same predeparture history; forecast uses only a fixed recent window",
+    "noise": "None in primary and sensitivity stages",
+    "information_exclusion": "No future rows, full-fire normalization, future-fitted parameters, or original DQN checkpoint passed to online planners"
+  },
+  "primary_methods": [
+    {"id": "snapshot_hold", "window_s": 30, "projection_cap_s": 60, "slope_gain": 0.0, "role": "causal snapshot baseline; last available measurement held constant"},
+    {"id": "trend_w30_c60", "window_s": 30, "projection_cap_s": 60, "slope_gain": 1.0, "role": "primary forecast; OLS slope over seven native samples, anchored to latest sample"},
+    {"id": "trend_w30_c60_half", "window_s": 30, "projection_cap_s": 60, "slope_gain": 0.5, "role": "predeclared secondary damped forecast, not tuned after results"}
+  ],
+  "forecast": {
+    "equation": "max(0, latest_rate + slope_gain * OLS_slope * min(query_time - latest_observed_time, projection_cap_s)); hold at cap thereafter",
+    "cap_interpretation": "Maximum trend extrapolation duration, measured from latest observation; planning continues to the same episode deadline",
+    "nonnegativity": "Clip predicted rate at zero; integrate zero-crossing and cap analytically",
+    "planner": "Backward time-expanded dynamic programming; minimum predicted FED, then fewer moves, then left/right/up/down action order; execute first action and replan",
+    "ground_truth_scoring": "Independent evaluator integrates piecewise-linear original public FER over departure-cell residence, charging initial interval once, no predeparture or exit dose"
+  },
+  "sensitivity_methods": [
+    {"id": "trend_w15_c60", "window_s": 15, "projection_cap_s": 60, "slope_gain": 1.0},
+    {"id": "trend_w60_c60", "window_s": 60, "projection_cap_s": 60, "slope_gain": 1.0},
+    {"id": "trend_w30_c30", "window_s": 30, "projection_cap_s": 30, "slope_gain": 1.0},
+    {"id": "trend_w30_c120", "window_s": 30, "projection_cap_s": 120, "slope_gain": 1.0}
+  ],
+  "stages": {
+    "primary": "All three online methods plus full-future reference: 2196 cached-table rollouts; report all departures and all cases",
+    "sensitivity": "Run the four fixed sensitivity methods only if any primary forecast has at least 1% lower mean FED at at least one departure, with all 61 arrivals there. Do not select a new primary method.",
+    "noise": "Deferred; no automatic noise sweep or enlarged training in this bounded task",
+    "maximum_wall_s": 6600,
+    "stop": "After implementation checks, primary results, triggered fixed sensitivity and one report; no result-dependent parameter search"
+  },
+  "analysis": {
+    "paired_tolerance_FED": 1e-10,
+    "failure": "Report arrivals first. Successful FED and paired differences use jointly reached cases; no partial-dose credit for failure.",
+    "primary_outcomes": ["arrivals", "mean and maximum FED", "paired lower/equal/higher FED", "mean travel time", "revisits", "worst harm and best gain", "plan computation time"],
+    "action_diagnostic": "At each visited forecast state where its first action differs from the snapshot action at the same state/time, score one forecast action followed by the snapshot policy to the episode deadline. Label harmful/helpful/neutral relative to snapshot continuation. These overlapping counterfactuals are not independent outcomes and are not summed into a causal total.",
+    "forecast_error": "MAE and RMSE over 58 unique regions at 10/30/60 s ahead, computed after policies are frozen; no cell-duplication weighting or fitting",
+    "reference": "Privileged full-future finite-horizon minimum-FED; compare to cached values within 1e-10; not an online competitor",
+    "timing": "Wall time for each global all-state first-action solve, with method order randomized by fixed seed; identical solver and remaining horizon. Reuse global policy tables across starts; do not count timing as 61 independent calls.",
+    "random_order_seed": 20261018,
+    "statistics": "Descriptive only; one fire, repeated start-times, no independent-fire confidence intervals or significance tests",
+    "continuation_decision": "Any benefit is feasibility evidence only. New independent physical conditions are required before generalization or introducing an LLM method. Explicitly report any increased FED and any failure."
+  },
+  "verification": [
+    "Changing unseen future rows cannot change available prefix, predicted costs or first actions",
+    "Native off-grid observations use last available row, never a future endpoint",
+    "Analytic forecast integral matches independent numerical integration including zero crossing and cap",
+    "Constant histories reduce trend to snapshot and produce the same actions",
+    "Remaining horizon enforces terminal reachability and never credits an incomplete path",
+    "Ground-truth oracle matches archived benchmark values and every reached route is bounded below by it",
+    "Common measurement history and solver constraints across online methods",
+    "All frozen source and previous-result file hashes verified before and after"
+  ],
+  "scope": {
+    "LLM_or_API_requests": 0,
+    "training_updates": 0,
+    "FDS_runs": 0,
+    "sealed_final48_scenarios_access": false,
+    "independent_fires": 1,
+    "matched_history_between_online_methods": true,
+    "independent_confirmation_claim": false,
+    "physical_reconstruction_claim": false
+  }
+}

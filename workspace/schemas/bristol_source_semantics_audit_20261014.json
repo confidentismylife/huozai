@@ -1,0 +1,35 @@
+{
+  "version": "1.0-source-only-audit",
+  "date": "2026-10-14",
+  "scope": "Check source-field provenance and map-code documentation. No outcome-based decoding, model inference, fitting or new performance evaluation.",
+  "source_archive": "outputs/dynamic_information_search_20261013/3kn82h2aamsfw2eplor4v2ewk0.zip",
+  "source_folder": "outputs/dynamic_information_search_20261013/bristol_context_data/3kn82h2aamsfw2eplor4v2ewk0",
+  "paper_pdf": "outputs/dynamic_information_search_20261013/tong_bode2023_main.pdf",
+  "table_transcription": "Human-checked against rendered PDF Table 1 (PDF page 6, printed page 5) and Table A.1 (PDF page 11, printed page 10). Sample counts only; no choice statistics used.",
+  "table_1": {
+    "busy_uneven": {"original": [20, 40], "mirror": [40, 20]},
+    "busy_one_unused": {"original": [20, 0], "mirror": [0, 20]},
+    "busy_even": {"original": [20, 20], "mirror": null},
+    "free_uneven": {"original": [2, 4], "mirror": [4, 2]},
+    "free_one_unused": {"original": [2, 0], "mirror": [0, 2]}
+  },
+  "table_A1": {
+    "no_map": {"busy_uneven": [15, 13], "busy_one_unused": [14, 14], "busy_even": [26], "free_uneven": [13, 16], "free_one_unused": [16, 12]},
+    "equal_map": {"busy_uneven": [14, 14], "busy_one_unused": [13, 16], "busy_even": [29], "free_uneven": [12, 12], "free_one_unused": [13, 13]},
+    "left_nearer_map": {"busy_uneven": [15, 11], "busy_one_unused": [15, 13], "busy_even": [29], "free_uneven": [13, 15], "free_one_unused": [14, 15]},
+    "right_nearer_map": {"busy_uneven": [11, 13], "busy_one_unused": [15, 12], "busy_even": [28], "free_uneven": [14, 13], "free_one_unused": [12, 14]}
+  },
+  "hypotheses": {
+    "README_relative": {"0": "no_map", "1": "majority_nearer", "2": "minority_nearer", "3": "equal_map"},
+    "absolute_candidate_unconfirmed": {"0": "no_map", "1": "left_nearer_map", "2": "right_nearer_map", "3": "equal_map"}
+  },
+  "comparison_assumptions": "Paper Table 1's left/right utility row labels may refer to fixed directions or to original scenarios only. Compare sample-count patterns with this ambiguity disclosed. Agreement is a provenance clue, never authoritative numeric-code identification.",
+  "raw_processed_match_fields": ["left_exit", "right_exit", "knowledge", "start_time", "finish_time"],
+  "time_link_policy": "Report exact matches first. Processed times have heterogeneous stored precision, so also report candidate raw times in [processed, processed+10^(-stored decimal digits)). This tests truncation compatibility without choices; ambiguous candidates remain unresolved and are not identities.",
+  "forbidden_for_decoding": ["exit_choice", "observed_exit", "LLM predictions", "method scores", "gender", "age"],
+  "do_not_promote_candidate": true,
+  "PPO_updates": 0,
+  "LLM_requests": 0,
+  "old_final_scenarios": "not_accessed",
+  "Liao_confirmation_scores": "not_computed"
+}

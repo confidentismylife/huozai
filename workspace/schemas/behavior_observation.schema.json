@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/fire-evac/behavior_observation.schema.json",
+  "title": "Participant-level evacuation route-choice observation",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "participant_id", "trial_id", "hazard_north", "hazard_south",
+    "congestion_north", "congestion_south", "sign_action",
+    "familiarity_branch", "previous_flow_north", "previous_flow_south",
+    "choice", "data_source"
+  ],
+  "properties": {
+    "participant_id": {"type": "string", "minLength": 1},
+    "trial_id": {"type": "string", "minLength": 1},
+    "hazard_north": {"type": "number", "minimum": 0},
+    "hazard_south": {"type": "number", "minimum": 0},
+    "congestion_north": {"type": "number", "minimum": 0},
+    "congestion_south": {"type": "number", "minimum": 0},
+    "sign_action": {"enum": ["north", "south", "neutral"]},
+    "familiarity_branch": {"enum": ["north", "south"]},
+    "previous_flow_north": {"type": "number", "minimum": 0},
+    "previous_flow_south": {"type": "number", "minimum": 0},
+    "choice": {"enum": ["north", "south"]},
+    "data_source": {"type": "string", "minLength": 1}
+  }
+}

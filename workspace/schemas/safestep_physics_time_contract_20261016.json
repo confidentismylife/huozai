@@ -1,0 +1,55 @@
+{
+  "task": "Source-bounded physical assumptions and native timestamp contract, followed by a 120s exploratory hotel pilot",
+  "output_directory": "outputs/safestep_physics_time_contract_20261016",
+  "parent_input": "outputs/safestep_hotel_fds_smokecheck_20261016/runs/hotel_init_v2/hotel_init_v2.fds",
+  "FDS_executable": "C:/Program Files/firemodels/FDS6/bin/fds_openmp.exe",
+  "FDS_version": "FDS-6.11.1-0-gff928db-release",
+  "runtime": {"MPI_processes": 1, "OMP_NUM_THREADS": "2", "timeout_s": 1200, "output_interval_s": 0.5, "pilot_end_s": 120.0},
+  "physical_parameters": {
+    "HCN_yield_kg_per_kg": {
+      "value": 0.007,
+      "source_id": "NISTIR4989",
+      "locator": "Untreated flexible polyurethane foam chair assemblies, ProtocolB, reported mean / Eq3 / Table22",
+      "status": "LITERATURE_TRANSFER_ASSUMPTION_NOT_GM27_OR_SAFESTEP_ORIGINAL",
+      "transfer_limit": "Different material assembly, ventilation and yield estimation; not a validated HCN yield for the hotel mattress",
+      "alternative_reference_value": 0.005,
+      "alternative_note": "Same report, alternative Eq6 estimate. Not a confidence interval and not a post-flashover range"
+    },
+    "fuel_formula": {"C": 1.0, "H": 1.7, "O": 0.3, "N": 0.08, "status": "INHERITED_NIST_FDGEN_MODEL_COMPOSITION_NOT_INDEPENDENTLY_VERIFIED_MATERIAL_CHEMISTRY"},
+    "fuel_specific_heat": {"rule": "gamma/(gamma-1)*R/MW", "gamma": 1.4, "source_id": "FDS6111_GUIDE", "status": "EXPLICIT_SOLVER_MODEL_ASSUMPTION_NOT_MEASURED"},
+    "EPUMO2_kJ_per_kg_O2": {"value": 13100.0, "source_id": "FDS6111_GUIDE", "status": "DOCUMENTED_SOLVER_DEFAULT_NOT_MEASURED_GM27_VALUE"},
+    "fuel_radiation_surrogate": {"value": "METHANE", "source_id": "FDS6111_GUIDE", "status": "DOCUMENTED_FALLBACK_EXPLICIT_NOT_REAL_MATTRESS_SPECTRUM"},
+    "transport_properties": {"rule": "Retain documented FDS molecular-weight / nitrogen Lennard-Jones fallbacks", "source_id": "FDS6111_GUIDE", "status": "MODEL_ASSUMPTION_NOT_EMPIRICAL_COMPLETION"},
+    "CO_yield_kg_per_kg": {"value": 0.042, "status": "PAPER_CONFIRMED"},
+    "soot_yield_kg_per_kg": {"value": 0.198, "status": "PAPER_CONFIRMED"},
+    "HRR_growth": {"rule": "5000*(t/326)^2 kW for t<=326s", "status": "PAPER_CONFIRMED_GROWTH_WITH_1S_LINEAR_RAMP_DISCRETIZATION"},
+    "door_open_setpoint_s": {"value": 100.0, "status": "PAPER_CONFIRMED"},
+    "window_temperature_C": {"value": 150.0, "status": "PAPER_THRESHOLD_WITH_UNVERIFIED_GAS_TEMPERATURE_PROXY"},
+    "burner_and_geometry": {"status": "INHERITED_RECONSTRUCTION_ASSUMPTION"},
+    "postpeak_curve": {"status": "UNKNOWN_ORIGINAL_NOT_REACHED_BY_120S_PILOT"}
+  },
+  "excluded_parameter_misread": {"source_id": "LUND7032", "locator": "TableA15 GM27 row", "value": 0.004, "correct_column": "HC(hydrocarbons)", "not": "HCN(hydrogen_cyanide)", "usable_as_HCN_yield": false},
+  "exploratory_human_reference_parameters": {
+    "ventilation_L_per_min": 25.0, "COHb_incapacitation_percent": 30.0,
+    "equation_rate_time_unit": "minute", "formula_concentration_units": {"CO": "ppm", "CO2": "percent", "HCN": "ppm"},
+    "convention_status": "reconstruction_assumption",
+    "parameter_provenance": "CO V/D/minute convention:Zisis etal2022 DOI10.3390/app12115667 Eq17. HCN2.36/minute convention:NISTTN1760. OriginalSafeStep V/D andconversion implementation remain unverified.",
+    "evacuation_start_fire_time_s": 300.0,
+    "use_for_hotel_pilot_evacuation_FED": false
+  },
+  "timestamp_contract": {
+    "canonical_clock": "actual fire_time_s from FDS CSV; SI seconds",
+    "evacuation_clock": "fire_time_s minus300; preserve negative values",
+    "concentration_units": "wet mol/mol; CO/HCN to ppm via1e6, CO2 topercent via100",
+    "rate_model": "Compute FER at native concentration times, then piecewise-linear FER between native nodes",
+    "integration": "Integrate piecewise-linear FER exactly; split at native nodes and route entry/exit times",
+    "regular_5s_table": "Derived interpolated rate samples for compatibility only; not the integration authority",
+    "linear_concentration_then_nonlinear_FER": "Different model; never substitute silently",
+    "extrapolation": false,
+    "sort_or_drop_duplicate_times_silently": false,
+    "maximum_allowed_native_gap_s": 1.0,
+    "coverage": "Require the complete requested exposure interval within available native timestamps",
+    "pilot_scope": "0..120s is entirely before evacuation; no route FED produced"
+  },
+  "constraints": {"training_updates": 0, "LLM_requests": 0, "sealed_final48_scenarios_read": false, "full900s_run": false, "fit_to_archived_hazard_or_FED": false}
+}

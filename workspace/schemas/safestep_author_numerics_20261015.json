@@ -1,0 +1,24 @@
+{
+  "version": "1.0-author-data-fixed-weight-reproduction",
+  "paper_doi": "10.1016/j.jobe.2025.115132",
+  "repository": "https://github.com/hqfang3/SafeStep_v1",
+  "commit": "573f613420e21e9a6731bc56fa36ea0b3f3a05f6",
+  "source_directory": "outputs/safestep_paper_numerics_20261015/author_repository",
+  "output_directory": "outputs/safestep_paper_numerics_20261015/numeric_run",
+  "start_time_s": 300,
+  "dt_s": 6.666666666666667,
+  "sampling_interval_s": 5,
+  "primary_integration": "Unchanged author Maze.play: initial dose rate(start,300)*dt; step k>=1 adds rate(destination,300+5*floor(k*dt/5))*dt; exit dose zero. Do not tune conventions to match reported endpoints.",
+  "evaluation": "Stored author weights, argmax over all four actions as published code; no masks, no training, no seed or checkpoint selection. Four paper routes also integrated independently.",
+  "paper_targets": [
+    {"id":"hotel_position1_recommended", "start":[5,1], "actions":[1,1,1,1,1,1,1,1,1,3], "steps":10, "time_s":66.7, "FED":0.1471, "source":"PDF p13 section5.3; Fig14"},
+    {"id":"hotel_position1_alternative", "start":[5,1], "actions":[3,3,3,1], "steps":4, "time_s":26.7, "FED":0.1671, "source":"PDF p13 section5.3; Fig12 geometry"},
+    {"id":"hotel_position2_recommended", "start":[10,9], "actions":[1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,0,0,0,3], "steps":19, "time_s":126.7, "FED":0.2300, "source":"PDF p13 section5.3; Fig15"},
+    {"id":"hotel_position2_alternative", "start":[10,9], "actions":[0,0,0,0,0,2,2,2,2,2,1], "steps":11, "time_s":73.3, "FED":0.3230, "source":"PDF p13 section5.3; Fig12 geometry"}
+  ],
+  "FED_acceptance": {"rounding_decimals":4, "absolute_tolerance":0.00005, "relative_diagnostic_tolerance":0.05},
+  "time_acceptance": {"absolute_tolerance_s":0.051},
+  "stop_rules": "Complete fixed-weight and four-route checks first. A mismatch is recorded rather than corrected by changing inputs. This run does not retrain or access the old sealed crowd scenarios.",
+  "small_cases": "No Case1/Case2 gas/FER file in this repository; keep their four FED targets unresolved. Hotel data must not be mapped onto the small building.",
+  "limitations": "Author public Beta is a specific release, not proven identical to final-paper training. Concentration-to-FER and FDS simulation remain upstream, not reproduced by supplied FER tables."
+}

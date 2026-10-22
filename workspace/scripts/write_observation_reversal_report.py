@@ -1,0 +1,100 @@
+"""Chinese evidence-grounded report for a completed cache-only diagnosis."""
+import csv
+import sys
+import numpy as np
+from observation_reversal_audit import ROOT, SOURCE, OUT, PAIR, REPORT, PROTOCOL, read, write, load, sha
+
+
+def table(name):
+    with (OUT/name).open(encoding='utf-8-sig',newline='') as f:return list(csv.DictReader(f))
+def link(label,path,line=None):
+    target=path.resolve().as_posix()+(f':{line}' if line else '')
+    return f'[{label}]({target})'
+def md(headers,rows):
+    return '\n'.join(['| '+' | '.join(headers)+' |','| '+' | '.join(['---']*len(headers))+' |']+['| '+' | '.join(map(str,r))+' |' for r in rows])
+def pp(x):return f'{float(x):+.6f}'
+
+
+def main():
+    assert not REPORT.exists()
+    s=read(OUT/'summary.json');v=read(OUT/'verification.json');assert v['all_checks_passed']
+    feats=table('feature_comparison.csv');wr=table('pair_world_outcomes.csv');splits=table('pair_fixed_splits.csv')
+    actual=table('test18_actual_outcomes.csv');neighbors=table('nearest_six_training_families.csv');terms=table('kernel_contributions.csv')
+    broad=table('all_test_nearest_candidate_pairs.csv');phase=table('test18_actual_trace_phases.csv');step=table('test18_actual_trace_by_step.csv')
+    scenes={f:s['pair_world_snapshot'][f]['scenario'] for f in PAIR};train=load(SOURCE/'training_dataset.npz')
+    totaldistance=sum(s['distance_groups'].values())
+    source=link('冻结原实验清单',SOURCE/'development_manifest.json')
+    rawfeature=link('49维完整输入与距离贡献表',OUT/'feature_comparison.csv')
+    scenario=link('场景参数逐项审计',OUT/'scenario_comparison.csv')
+    protocol=link('本轮固定分析边界',PROTOCOL)
+    sections=['# 相似初始观测收益反转：缓存审计报告\n\n日期：2026-10-05。分析对象：五PPO轻量选择实验的已查看开发银行。',
+        '## 1. 结论先说清楚\n\n这次已查清“反转发生在哪里、模型为什么给出错误负预测”，还没有查清每个物理参数的因果贡献。F5TE0018与F5TR0006只是冻结核模型度量下的最近邻，**不是相同初始观测**。49维中有11维不同，涉及出口容量、火势增长、起火时间和背景烟气。这些物理差异均在本银行的初始输入中可见。两家庭的真实火源均为南、错误预报均为北，因而“这一对的火源/预报方向不同”不能解释反转。\n\n'
+        '**PPO603的最坏世界配对收益M，从训练家庭的−16.319444个百分点变成留出家庭的+14.131944个百分点。** 这是真实缓存结局中的变化：两世界各12条配对样本，在训练家庭全部为负，在留出家庭全部为正。八个固定人口/未来分割也全部同方向；它们是重叠的描述性分割，不是八次独立验证。\n\n'
+        '反转伴随两项明显变化：601在留出家庭的绝对失能损失大幅上升；603的规划行为从平均请求等待约41步变为0步，且自身绝对损失降低。冻结M核模型仍预测603收益−18.607240个百分点，因为其训练均值为负、邻域及多个中心化核贡献也为负，模型没有表达这次收益变化。\n\n'
+        '本轮只读现有缓存，新增模拟0、拟合0、PPO更新0、LLM调用0。未修改输入、阈值、候选、余量或当前门控。',
+        '## 2. 本轮实际做了什么\n\n'+protocol+'在本轮新增数值计算之前保存，但指定家庭的上一轮结果已经看过，因此本方案不属于盲法预注册。\n\n'
+        '完整读取60家庭的规划缓存，独立重算R/M标签；对重点家庭逐项检查49维输入和所有场景参数，拆出20条世界—策略汇总、90条固定分割、240条逐种子配对记录；审计F5TE0018的60条独立实际轨迹（2225步）；重算两个冻结核模型的192条代数贡献；对24个开发留出家庭做192条最近邻—候选—目标对照；扫描全部60家庭的1770对输入。\n\n'
+        '所有“实际结局”仍指合成图环境中的缓存模拟结果，不是真实火灾或现实人员实验。五候选均为此前冻结的纯PPO601—605；本轮没有LLM建议控制臂。入口选择器在初始时刻选一次策略，所选PPO随后闭环执行原有9动作。选择器用49维，PPO本体用前34维且建议通道为零；新增15维历史输入不参与这五个PPO本体的决策。\n\n'+source,
+        '## 3. “相似”究竟指什么\n\n'+md(['参数','F5TR0006训练家庭','F5TE0018开发留出家庭','初始输入'],[
+            ['真实火源','南','南','起始烟气不能识别；两个假设世界分别置北/南'],
+            ['预报火源','北，错误','北，错误','19/20，两个家庭相同'],
+            ['北出口容量',scenes[PAIR[0]]['north_exit_capacity'],scenes[PAIR[1]]['north_exit_capacity'],'14与23，重复编码'],
+            ['南出口容量',scenes[PAIR[0]]['south_exit_capacity'],scenes[PAIR[1]]['south_exit_capacity'],'15与24，重复编码'],
+            ['火势增长率',f"{scenes[PAIR[0]]['growth_rate']:.9f}",f"{scenes[PAIR[1]]['growth_rate']:.9f}",'21，除0.05，本银行未裁剪'],
+            ['起火步数',scenes[PAIR[0]]['onset_step'],scenes[PAIR[1]]['onset_step'],'22，除20，本银行未裁剪'],
+            ['背景烟气/FED增量',f"{scenes[PAIR[0]]['background_hazard']:.9f}",f"{scenes[PAIR[1]]['background_hazard']:.9f}",'5—9初始均相同，能恢复该参数'],
+            ['封闭出口','无','无','25/26与实时容量'],['冲突类别','compound_conflict','compound_conflict','标签元信息；未进入策略输入']])+
+        '\n\n改变的索引为5、6、7、8、9、14、15、21、22、23、24。其余38维相同，大量维度在初始时刻本就固定：人数各半、房外人数为零、指示中性、历史积分/差分/时钟为零、建议通道为零。因此“很多维相同”不能直接解释为具有相同控制难度。\n\n'
+        '核相似度0.754887是 `exp(−gamma × 标准化平方距离)`，不是75.49%信息相同，也不是75.49%可信度。模型有19个随训练家庭变化的输入维度，gamma=1/38，平方距离10.685113；该家庭只是现有24个训练样本中的最近者。\n\n'+
+        md(['差异组','标准化平方距离','占距离比例'],[[k,f'{d:.6f}',f'{d/totaldistance*100:.4f}%'] for k,d in s['distance_groups'].items() if d>0])+
+        '\n\n两侧出口容量合计贡献62.4306%的距离，背景烟气贡献24.3467%，增长和起火时间合计13.2227%。这是当前标准化核度量的权重表现，**不是各因素导致失能的比例**。同一容量在实时与名义通道出现两次，初始背景烟气出现五次，重复编码会影响距离；本轮只诊断，没有按已知正例改动距离。\n\n'
+        '代码核对纠正了一个原先可能的误解：增长率与起火时间是由场景真实字段直接写入“forecast”输入，当前噪声设置没有破坏它们；背景烟气也能由初始读数恢复。60家庭中增长/起火/封闭结束的编码均未触及上界裁剪，封闭开始和封闭容量都固定为0。这个银行不能证明模型能应对这些预报量出错。\n\n'+rawfeature+'；'+scenario+'。实现见'+link('输入编码',ROOT/'src/fire_evac/confirmatory.py',143)+'、'+link('容量观测',ROOT/'src/fire_evac/dynamic_conflicts.py',300)+'和'+link('初始历史状态',ROOT/'src/fire_evac/terminal_shield.py',56)+'。',
+        '## 4. 把两个火源世界拆开，收益反转确实存在\n\n失能损失是人数比例；收益是601损失减候选损失。收益正值表示候选更好，单位为百分点。下表损失列为百分比，和收益列的单位不同。\n\n'+md(
+            ['家庭','假设火源','PPO','601失能(%)','候选失能(%)','收益(百分点)','12样本正/负'],
+            [[r['family'],('北','南')[int(r['world'])],601+int(r['candidate_index']),f"{float(r['baseline_loss_pp']):.6f}",f"{float(r['candidate_loss_pp']):.6f}",pp(r['gain_pp']),r['gain_positive_count']+'/'+r['gain_negative_count']] for r in wr if int(r['candidate_index']) in (2,3,4)])+
+        '\n\n![重点家庭各世界的策略绝对失能损失]('+ (OUT/'pair_world_losses.png').resolve().as_posix()+')\n\n'
+        '以真实南火源世界的603为例，反转不是只发生在相对收益标签中：601失能从0变成22.395833%；603失能从16.319444%降到8.263889%。收益由−16.319444变成+14.131944个百分点，差30.451389个百分点，可以纯算术分解为601损失上升22.395833个百分点，加上603自身损失降低8.055556个百分点。这个分解不是因果分解；两家庭物理参数和固定人口都不同。\n\n'
+        '北火源世界也出现同样方向的变化：603收益−12.291667→+17.256944个百分点，变化29.548611个百分点。两世界都翻转，因此该重点反转不能仅用“换了最坏世界”解释。\n\n'
+        'M是先汇总人口与未来，再取两个世界中最小的配对收益；R是601最大世界损失减候选最大世界损失。两者不相同。例如留出家庭602的R为+0.833333，但M为−2.881944，因为该候选的最大损失落在南世界而601最大损失在北世界。不能将正R当成每个世界都受益。\n\n'+md(['家庭','PPO','R(百分点)','M(百分点)'],[[f,601+j,pp(s['pair_world_snapshot'][f]['R_pp'][j]),pp(s['pair_world_snapshot'][f]['M_pp'][j])] for f in PAIR for j in range(1,5)])+
+        '\n\n完整证据：'+link('20条世界汇总',OUT/'pair_world_outcomes.csv')+'、'+link('240条逐种子配对结果',OUT/'pair_seed_gains.csv')+'。',
+        '## 5. 是不是恰好抽中了几个未来\n\n对603，训练家庭两个世界各12条配对收益均负；留出家庭两个世界各12条均正。两固定人口分别汇总、前3/后3个未来分别汇总，以及人口×未来分半，共8个预先写入本轮边界的分割：训练M全部负，留出M全部正。\n\n'+md(['家庭','候选','8分割M正','M负','中性/微小'],[[f,601+int(j),d['positive'],d['negative'],d['neutral_or_small']] for f in PAIR for j,d in s['fixed_split_M_class_counts'][f].items()])+
+        '\n\n这些分割共享样本，也共享每家庭两个固定人口，不能当作独立重复实验或新的显著性检验。它们支持“在当前有限缓存中，603的大反转不是少数未来的符号偶然”，但仍不能排除人口构成、不同家庭种子流及参数交互的影响。\n\n'
+        'F5TE0018还有未用于拟合的独立实际未来。603实际收益+16.145833个百分点，12条配对全部正，范围+11.666667至+21.250000个百分点。实际损失7.951389%，与真实南世界规划8.263889%仅差−0.312500个百分点；601实际损失24.097222%，比规划22.395833%高1.701389个百分点，故实际收益比南世界规划高2.013889个百分点。总体方向与规划一致。\n\n'+md(['PPO','实际失能(%)','实际收益(百分点)','规划南世界收益','12实际样本正/负'],[[601+int(r['candidate_index']),f"{float(r['actual_loss_pp']):.6f}",pp(r['actual_gain_pp']),pp(r['true_world_planning_gain_pp']),r['actual_gain_positive_count']+'/'+r['actual_gain_negative_count']] for r in actual])+
+        '\n\n训练家庭没有独立实际结局。独立未来仍复用这两个固定人口，不是独立新人口或新场景。完整证据：'+link('固定分割表',OUT/'pair_fixed_splits.csv')+'、'+link('实际结局',OUT/'test18_actual_outcomes.csv')+'。',
+        '## 6. 策略实际执行了什么：出现明显行为变化\n\n规划缓存保存了结局中的平均动作统计，没有规划逐步轨迹。603在训练家庭北/南世界平均等待请求40.666667/41.000000次，平均结束步数52；到留出家庭两个世界等待请求均0，结束步数38。等待请求是9动作空间中的动作8，并非封闭出口自动阻断；本对场景都没有封闭。\n\n'
+        '603的平均放行容量比例也从训练北/南世界0.197516/0.193109变成留出两个世界0.368421。601则从0.648908/0.634151变成0.329512/0.329512。它们在初始时刻的首动作保持相同：601都是北向全放行（动作3），603都是南向全放行（动作7）。因此仅观察首动作无法解释反转；需要看后续闭环行为。\n\n'
+        '留出家庭的独立实际动作记录更完整，以下北/南/中性列是全部12回合的执行步数之和，不能当作选择该出口的人数：\n\n'+md(['PPO','轨迹总步数','北/南/中性步数','等待请求','指示保持阻挡','逐步加权放行容量比例'],[[601+int(r['candidate_index']),r['step_count'],r['north_sign_steps']+'/'+r['south_sign_steps']+'/'+r['neutral_sign_steps'],r['wait_requests'],r['hold_blocks'],f"{float(r['mean_capacity_fraction_step_weighted']):.6f}"] for r in phase if r['phase']=='all'])+
+        '\n\n601在521个实际记录步上全部指北，从第8步起所有回合的放行容量都为25%；603在456个记录步上全部指南、无等待、无保持阻挡，前5步全放行，第5步25%、第6步又全放行，之后降到25%。604前3步指北，第3步开始所有回合指南。603与604在这组场景中失能较低，但执行方式并不等同。\n\n'
+        '这里真实南方有火、北出口容量2、南出口容量6：危险程度与通行能力存在冲突。可以提出“持续引导到低容量出口和等待/放行行为变化共同影响滞留与烟气暴露”的机制假设。然而方向指示并不强制每个行人按指示行走；现有轨迹没有逐步人数、烟气读数、个体FED或失能发生时刻，无法证明是哪批人因何失能。更不能据此给出现实火灾时应走有烟出口的建议。\n\n'
+        '605有249个保持阻挡步、12次等待、8个中性且正放行的实际组合（动作−1）。这些实际执行统计已核对，不能用请求动作冒充实际动作。记录中的放行比例是容量指令，未必对应真实放行人数，尤其房间已经空时。\n\n'
+        '证据：'+link('逐回合动作审计',OUT/'test18_actual_trace_episodes.csv')+'、'+link('逐时刻动作汇总',OUT/'test18_actual_trace_by_step.csv')+'、'+link('阶段汇总',OUT/'test18_actual_trace_phases.csv')+'。源码中'+link('环境执行顺序',ROOT/'src/fire_evac/env.py',166)+'是先增加FED，再出廊、分支选择、房间放行，下一步观测随步数更新。表中的第0步对应缓存elapsed=0；火势额外增长在step>onset时出现。',
+        '## 7. 冻结模型为什么预测成负收益\n\n核回归使用24个训练家庭，按训练均值/标准差处理输入。它不是最近邻投票，也不是训练标签的非负加权平均。已冻结模型的每个输出等于训练标签均值截距，加上中心化核与24个已拟合系数相乘之和；这些代数贡献可正可负。\n\n'+
+        md(['M模型邻居排名','训练家庭','核相似度','训练603 M(百分点)'],[[r['rank'],r['family'],f"{float(r['similarity']):.6f}",pp(r['label_603_pp'])] for r in neighbors if r['target']=='M'])+
+        '\n\n603的M预测完整恒等式为：**−6.569734（训练均值截距）−12.037507（24项中心化核贡献之和）=−18.607240个百分点**。最近家庭F5TR0006贡献−6.762919个百分点；其他23项合计−5.274587个百分点。排名第5的F5TR0012单项贡献−7.418826，排名第2的F5TR0019贡献−4.901674，同时也有其他家庭的正项抵消。故不能把负预测全部归罪于最近邻。\n\n'
+        '训练中603的M有2/24家庭严格为正，最大+5.208333个百分点；留出家庭的+14.131944超过现有训练中该候选的最大M。留出604和605也超过各自的训练最大M。这个事实说明当前训练标签没有覆盖这些收益幅度，并不单独证明其输入超出训练分布。603的M标签误差是32.739185个百分点，实际收益与M核预测差34.753074个百分点；当前负预测连无余量选择也不会提名它，因此仅调低余量不能解决这次漏检。\n\n'+
+        md(['候选','训练最近邻M','开发留出M','冻结M核预测','独立实际收益'],[[601+j,pp(s['pair_world_snapshot'][PAIR[0]]['M_pp'][j]),pp(s['pair_world_snapshot'][PAIR[1]]['M_pp'][j]),pp(s['kernel']['M']['prediction_pp'][j]),pp(s['test18_actual'][j]['actual_gain_pp'])] for j in range(1,5)])+
+        '\n\n证据：'+link('全部192项核贡献',OUT/'kernel_contributions.csv')+'、'+link('两个模型各6近邻',OUT/'nearest_six_training_families.csv')+'；模型公式见'+link('冻结核预测实现',ROOT/'scripts/five_ppo_student.py',41)+'。贡献表只解释该模型的输出，不识别疏散物理原因。',
+        '## 8. 是否只挑了一个有利案例\n\n为防止把单案例写成普遍定律，对全部24个开发留出家庭固定选择最近训练家庭，每候选分别比较R/M。严格翻转定义为一边>+0.10、另一边<−0.10个百分点，排除零或微小变化。\n\n'+
+        md(['留出家庭','最近训练家庭','目标','PPO','相似度','邻居标签','留出标签','实际收益'],[[r['family'],r['nearest_training_family'],r['target'],601+int(r['candidate_index']),f"{float(r['similarity']):.6f}",pp(r['nearest_label_pp']),pp(r['test_label_pp']),pp(r['actual_gain_pp'])] for r in broad if r['strict_sign_reversal']=='True'])+
+        '\n\nR与M各有4/96条候选对照严格翻转（均4.1667%），分别涉及3个家庭；两目标重复记录不能相加当作独立事件。F5TE0018的603/604翻转幅度最大；其他翻转较小，有的规划正收益在实际结局中为0。因此“相似输入收益反转”存在，但当前缓存不能支持“所有近邻都无用”或“收益本质不可学习”。\n\n'
+        '全部60家庭的1770对没有完全相同的屏蔽后输入，也没有最大差<=1e−6的近似相同对。连续随机参数的小银行本就容易避免碰撞，结果不能证明输入足以识别所有状态。另一方面，**每家庭两个源世界在初始输入上相同**，但世界损失常不同：火源在初始烟气中不可辨识，这是明确存在的初始信息不确定性。M已在两世界内做保守汇总。此重点家庭跨训练/留出的反转发生在同一方向的每个世界内，所以不能仅靠这个火源不确定性解释。\n\n'
+        '每家庭两个固定人口也有完全相同的初始汇总观测，但个体熟悉度、服从、风险/拥堵敏感度、名单顺序和后续选择不同。初始个体FED按源码固定为0，不能用“初始未观测FED不同”解释本轮；后续累计个体FED和个体属性没有进入选择器。种子相同也不保证策略改变后每个人使用同一随机抽样，缓存中的配对并非逐人因果对照。\n\n'+link('全开发留出最近邻表',OUT/'all_test_nearest_candidate_pairs.csv')+'、'+link('全部1770对比较',OUT/'all_bank_pair_comparisons.csv')+'、'+link('输入碰撞检查',OUT/'exact_observation_collision_audit.json')+'。',
+        '## 9. 下一步的最小核查：先找响应转折，不追加训练\n\n缓存已经定位到“可见参数不同、策略闭环行为改变、601与603绝对损失排序反转、学生预测没有跟上”。它不足以区分北出口容量、南出口容量、增长率、起火时间、背景烟气及其交互分别造成多少变化；也不足以还原训练家庭603在哪一步为何请求等待。\n\n'
+        '建议下一轮另存固定协议，做一个**2×2小型受控模拟诊断**：容量组取训练端(5,10)与留出端(2,6)，火势时序组取两端的(增长、起火、背景)三元组，形成4个组合。保持预报北、无封闭，分别在北/南源世界运行601与603；各用同一组2个固定人口、每人口6个未来。预算为4组合×2世界×2策略×2人口×6未来=192条完整模拟，0拟合、0PPO更新、0LLM调用。本轮没有执行这192条。\n\n'
+        '这一步首先判别是容量组、火势时序组还是二者交互伴随反转，并记录等待开始/结束、执行方向与放行容量、真实放行人数、各区人数/烟气、区域FED汇总与每步新增失能。旧缓存没有这些轨迹，应新版本另存，不能覆盖或补写旧数据。容量组内两侧容量、火势组三个变量仍未分别隔离；如果组效应明确，再针对有效组做更细的单变量核查，不预先把组结果称为单参数因果贡献。\n\n'
+        '所有组合使用相同人口种子控制潜在人口差异，未来流按世界—人口—未来块匹配；仍记录逐人随机流不完全对齐的限制，避免把相同种子宣传为相同个体选择。该192条是围绕已知开发正例的机制诊断，不能当作新的最终评估或LLM贡献证据。\n\n'
+        '只有查清响应转折后，才讨论是否改用容量与火势时序的交互特征、分别预测候选/基线绝对损失，或延后到获得实时信息再选择策略。这些都只是待验证方案。若真的修改学生或目标，应冻结新方案，用新开发训练/校准银行及独立最终银行评估；现有已看留出不能重新包装为最终测试。',
+        '## 10. 验证、保存及尚未建立的结论\n\n5个数学测试通过（0.30秒），覆盖人口汇总顺序、R/M差异、严格翻转阈值、中心化核恒等式和非法输入。独立验证脚本直接从缓存重算全部60家庭规划标签及本轮关键表：49维、20世界行、90固定分割、240逐种子行、192核贡献、60实际轨迹、192最近邻候选行、1770银行对。核预测与原已保存预测一致；实际放行、等待、保持阻挡与原结局字段一致。图的轴、标签和图例已视觉检查。\n\n'
+        '首次独立验证因脚本遗漏Counter导入而退出；已补全导入并通过同一验证，原始数据和本轮分析数据未丢失、未改写。失败记录另存。开始时检查上轮272文件台账、2124冻结来源、所有更早完成台账、119个历史独立文件及40核心文件；打包时再检查，并精确保留更新前live status字节。\n\n'
+        '上一轮的9360条模拟、4次矩阵拟合、2项训练均值参考估计继续属于上一轮，**不算本轮新增**。本轮0模拟、0拟合、0PPO更新、0LLM调用。原始95%/10%/5%/95%资格阈值和0.10个百分点收益下限不变。当前门控未重新取得资格，第三轮正式PPO训练和最终银行未启动。\n\n'
+        '上一轮未加余量的R线性学生仍保留混合信号：相对601平均失能降低0.300926个百分点，区间包含0且1家庭变差；不能因这次重点案例把所有模型概括为一致失败。所有余量学生回退601、实际收益MAE不如零预测的结论也不改变。\n\n'
+        '尚未建立：特定物理参数的因果机制、修改学生能稳定改善、跨行为/地图/观测噪声泛化、真实火灾效能、LLM独立贡献或动态纠正LLM的效果。\n\n'
+        '证据入口：'+link('本轮摘要',OUT/'summary.json')+'、'+link('独立验证结果',OUT/'verification.json')+'、'+link('验证首次失败记录',OUT/'verification_first_attempt_failure.json')+'、'+link('输入保全清单',OUT/'development_manifest.json')+'。']
+    text='\n\n'.join(sections)+'\n';REPORT.write_text(text,encoding='utf-8')
+    write(OUT/'report_assets_manifest.json',{'report_sha256':sha(REPORT),'summary_sha256':sha(OUT/'summary.json'),
+        'verification_sha256':sha(OUT/'verification.json'),'writer_sha256':sha(__file__),'figure_visually_inspected':True,
+        'essential_data_clipped':False,'report_characters':len(text),'new_simulations':0,'new_model_fits':0})
+    print(f'Report saved: {len(text)} characters',flush=True)
+
+
+if __name__=='__main__':sys.stdout.reconfigure(encoding='utf-8');main()

@@ -1,0 +1,41 @@
+{
+  "version": "1.0-bounded-synthetic-observation-probe",
+  "question": "Can current hazard observations distinguish opposing route choices, and can a simple rolling planner exploit observations revealed after departure?",
+  "source_config": "schemas/safestep_reproduction_20261014.json",
+  "source_review": "outputs/safestep_critical_review_20261014/cached_evidence_review.json",
+  "start": "Room_B",
+  "case_blocks": {"case1_early": 220, "case2_late": 565},
+  "reveal_steps": {"immediate": 0, "delayed": 2},
+  "danger_centers": {"left": 7, "right": 17},
+  "peak_rates_per_second": {"low": 0.004, "high": 0.012},
+  "background_rate_per_second": 0.00005,
+  "spread_cells": 0.9,
+  "field_definition": "At each control tick k, non-exit FER = background + peak*exp(-0.5*((x-center)/spread)^2) if k>=reveal_step, otherwise background. Exit FER=0. Rates held constant over each control interval. Designed engineering field, no FDS or gas-physics interpretation.",
+  "seeds": [41, 42, 43],
+  "max_steps": 128,
+  "time_cost_in_FED_per_step": 0.00125,
+  "primary_metric": "First require exit reached, then compare J = personal_FED + 0.00125*steps. This is a new engineering objective; not the full discounted, piecewise SafeStep reward. No-path/timeout has no finite primary score.",
+  "other_metrics": ["personal_FED", "time_seconds", "paper_discounted_reward", "invalid_actions", "revisits", "FED_above_0_3", "J_regret_vs_future_oracle", "planning_calls", "route_change_after_reveal"],
+  "methods": ["fixed_left", "fixed_right", "nearest_exit", "snapshot_once", "snapshot_replan", "legacy_DQN_seed41", "legacy_DQN_seed42", "legacy_DQN_seed43", "future_J_oracle"],
+  "information": {
+    "fixed_left": "Map and position; initial shortest route to exit A, then follow.",
+    "fixed_right": "Map and position; initial shortest route to exit B, then follow.",
+    "nearest_exit": "Map and position; initial shortest route to either exit, then follow.",
+    "snapshot_once": "Map and complete noiseless current FER at departure; hold that snapshot fixed for initial route planning. Minimize sum(dt*FER_current + time_cost).",
+    "snapshot_replan": "Map and complete noiseless current FER at each control tick; same snapshot route objective as snapshot_once, execute one move then replan. No future field, onset, side label or scenario ID input.",
+    "legacy_DQN": "Saved model matched to early/late block; position one-hot only plus geometric legal-action mask. Old training fire was different. Diagnostic of the frozen legacy policy, not a fair test of all possible DQNs.",
+    "future_J_oracle": "Full future FER at all control ticks; finite-horizon dynamic programming reference. Privileged information; not an online competitor."
+  },
+  "constraints": "All methods move one legal neighboring cell per tick. No wait, teleport, hazard hard mask, incapacitation termination, crowd, LLM or retraining. Same cell size, speed, reward bookkeeping and episode cap. Start personal FED=0.",
+  "planned_scenarios": 16,
+  "planned_rollouts": 144,
+  "replication": "Eight relative hazard patterns repeated in two absolute-time/model blocks. Time-shifted blocks, left/right variants, severities and DQN seeds are descriptive repeated conditions, not independent fires or human subjects. No significance tests.",
+  "order_seed": 20261014,
+  "frozen_decision_rules": {
+    "design_discriminates": "For each immediate-severity-time pair, future-J-optimal exit changes when dangerous side changes; initial delayed-side pairs have exactly identical observations.",
+    "current_observation_useful": "snapshot_replan reaches exit in all 16 cases, loses no snapshot_once success, and has lower J by >1e-10 on all four delayed-right cases. Report failures if any criterion fails; no parameter retuning in this round.",
+    "legacy_claim": "If a frozen DQN produces identical actions under different hazards, describe observation/transfer limitation only. Do not infer that DQN with hazard inputs would fail.",
+    "stop": "Finish this single frozen bank and report. Do not add scenarios, retrain, tune prompts or access the old sealed final bank based on results."
+  },
+  "scope": "Synthetic development mechanism test. Does not reproduce original paper numeric results, establish real fire safety, or validate human behavior."
+}

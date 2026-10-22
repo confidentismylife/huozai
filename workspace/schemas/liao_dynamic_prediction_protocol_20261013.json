@@ -1,0 +1,42 @@
+{
+  "version": "0.1-audit-draft",
+  "status": "prepared_not_frozen_for_model_comparison",
+  "question": "Can past observed motion predict a change in annotated exit target within the next two seconds?",
+  "scope": "Low-pressure autonomous pedestrian egress; camera-observation prediction, not guidance causality or fire-control validation.",
+  "fps": 16,
+  "history_frames": 16,
+  "horizon_frames": 32,
+  "stride_frames": 16,
+  "sample_policy": "Every eligible track: first_frame+history_frames, then stride_frames; retain unchanged tracks and all eligible windows.",
+  "time_policy": "Preserve raw frames. Cross-person synchronized snapshots remain disabled until the common camera clock is verified. Individual first-frame elapsed seconds only for track-relative diagnostics. Do not equate first-frame time with acoustic start.",
+  "primary_input": ["past_focal_positions_m", "past_focal_motion"],
+  "primary_forbidden_input": ["exit_choice_annotations", "future_positions", "final_exit", "complete_trajectory", "egress_time", "table_S3", "run_ID", "local_person_ID", "true_switch_count"],
+  "neighbor_features": "disabled_until_wall_visibility_and_frame_synchronization_audit_complete",
+  "map_features": "disabled_until_exit_lines_and_wall_coordinates_verified",
+  "privileged_annotation_condition": "Separate secondary condition. If current/past annotated target is supplied, supply it equally to all methods and disclose retrospective annotation.",
+  "primary_targets": ["annotated_exit_at_horizon", "any_different_nonzero_target_in_next_32_frames"],
+  "exclusion_policy": {
+    "B_5": "quarantine_all_windows_pending_0_to_1_semantics; preserve in separate manifest",
+    "current_or_future_label_zero": "unresolved_not_negative",
+    "incomplete_future": "right_censored_not_negative",
+    "frame_gap": "exclude_and_record"
+  },
+  "proposed_development_runs": ["A_1", "A_2", "A_3", "A_5", "A_8", "A_9", "B_1", "B_2", "B_3", "C_1"],
+  "proposed_confirmation_runs": ["A_4", "A_6", "A_7", "A_10", "B_4", "B_6", "C_2", "C_3"],
+  "quarantine_runs": ["B_5"],
+  "split_disclosure": "Structural counts/labels have already been audited across all runs. Proposed partition is not wholly unseen data, and repeated-participant independence is unverified. Freeze before predictive evaluation; do not move runs after seeing model scores.",
+  "baselines": [
+    "training-only constant event probability",
+    "maintain inferred route (requires validated map for exit probabilities)",
+    "nearest accessible exit (requires validated map)",
+    "regularized dynamic Logit using exactly the same observed features",
+    "one locked local LLM using exactly the same feature serialization"
+  ],
+  "LLM_lock_requirements": ["exact_model_digest", "prompt_hash", "temperature", "seed_if_supported", "token_limit", "timeout", "probability_schema", "latency", "invalid_output_policy"],
+  "metrics": ["event_NLL", "event_Brier", "PR_AUC", "event_recall", "false_alarms_per_person_minute", "precision", "future_exit_NLL", "paired_difference_by_run", "invalid_output_rate", "latency"],
+  "aggregation": "Report per-run results and both run-macro and person-run-macro averages. Windows are repeated measurements. Bootstrap runs only as exploratory sensitivity; cannot remove unknown across-run person dependence.",
+  "rare_event_rule": "Do not claim success from overall accuracy. Report event/person-run/window denominators separately. Case-control samples, if used for low-cost LLM diagnosis, are secondary and cannot yield population precision without design correction.",
+  "decision_rule": "After map and semantics preflight, run a bounded baseline pilot. Start one LLM comparison only if protocol and model settings are locked. Do not resume PPO from a behavior-prediction score alone.",
+  "pending": ["main_Figure_1_numeric_geometry", "B5_annotation_semantics", "online_route_inference_definition", "model_and_prompt_lock", "final_partition_freeze"],
+  "old_48_evacuations": "remain_unread_and_out_of_scope"
+}

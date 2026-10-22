@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/fire-evac/fds_zone_timeseries.schema.json",
+  "title": "FDS-derived zone hazard record",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["scenario_id", "step", "zone", "fed_increment"],
+  "properties": {
+    "scenario_id": {"type": "string", "minLength": 1},
+    "step": {"type": "integer", "minimum": 0},
+    "time_s": {"type": "number", "minimum": 0},
+    "zone": {
+      "enum": ["room_a", "room_b", "junction", "north_corridor", "south_corridor"]
+    },
+    "temperature_c": {"type": "number"},
+    "visibility_m": {"type": "number", "minimum": 0},
+    "co_ppm": {"type": "number", "minimum": 0},
+    "fed_increment": {"type": "number", "minimum": 0}
+  }
+}

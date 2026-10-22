@@ -1,0 +1,75 @@
+{
+  "version": "2.0-logging-only-repair",
+  "author_commit": "573f613420e21e9a6731bc56fa36ea0b3f3a05f6",
+  "source_directory": "outputs/safestep_paper_numerics_20261015/author_repository",
+  "output_directory": "outputs/safestep_author_training_20261015_v2",
+  "seeds": [
+    141,
+    142,
+    143
+  ],
+  "parallel_processes": 3,
+  "torch_threads_per_process": 1,
+  "per_run_timeout_seconds": 3600,
+  "start_time_seconds": 300,
+  "common_train_arguments": {
+    "discount": 0.95,
+    "exploration_rate": 1.0,
+    "exploration_decay": 0.9995,
+    "sample_size": 64,
+    "network_sync_rate": 50,
+    "replay_memory_size": 1000,
+    "check_convergence_every": 500,
+    "log_dir": false
+  },
+  "arms": [
+    {
+      "id": "public_beta",
+      "episodes": 20000,
+      "learning_rate": 0.01,
+      "reward_exit": 0.0,
+      "stop_at_convergence": true,
+      "meaning": "Pinned public main.py settings and original training/update routine. Original all-start convergence checks and last20 losses<0.5 early stop retained."
+    },
+    {
+      "id": "paper_listed_parameters",
+      "episodes": 12000,
+      "learning_rate": 0.008,
+      "reward_exit": 10.0,
+      "stop_at_convergence": false,
+      "meaning": "Paper-listed hotel episode count, learning rate, and exit reward applied to public routine. Not a complete Table2 implementation: public episode-end optimizer, four-output loss, timeout bootstrap retained."
+    }
+  ],
+  "seed_control": "Seed Python, NumPy and torch once. Each original Maze.reset is passed a fresh deterministic int from an independent numpy Generator(100000+run_seed), avoiding its random.seed(None) entropy reseeding. All reset seeds recorded. Same seed pairs have identical initial policy tensors.",
+  "io_only_adaptations": [
+    "Headless direct wrapper preserves original Status enums, action_step starts1 and original Maze.step; avoids Gym bool warnings.",
+    "Original save hook records episode metrics; save at500-episode intervals and final instead of overwriting original repository weights each episode.",
+    "Original replay and optimizer invoked unchanged; journal transitions and sampled transition IDs without additional RNG draws.",
+    "Source imported via reviewed Python text, not supplied bytecode; no main.py demonstration execution."
+  ],
+  "progress_every_episodes": 100,
+  "checkpoint_every_episodes": 500,
+  "transition_chunk_size": 10000,
+  "smoke_test": {
+    "episodes": 100,
+    "seeds": [
+      905,
+      905
+    ],
+    "repeatability": "Run twice to check exact reset sequences, transition arrays, losses and final weights; not part of final six runs."
+  },
+  "evaluation": "Evaluate final model only on both fixed paper starts and all61 starts. Keep failed seeds; no best-checkpoint/seed selection and no training extension after scores.",
+  "frozen_success_criteria": {
+    "trajectory_reproduction": "Both paper-start routes equal the author stored-weight routes; exact step counts10/19 and FED rounded4 decimals0.1471/0.2300.",
+    "all_start_arrival": "61/61 exits with no illegal moves and no revisits at final weights.",
+    "across_seed_claim": "Report numerator/3 for each criterion; do not infer statistical robustness from three seeds on one scenario."
+  },
+  "not_attempted": [
+    "Original small-case62% result without missing small-building data",
+    "FDS or concentration-to-FER regeneration",
+    "LLM or crowd PPO training",
+    "Original48 sealed final crowd scenarios"
+  ],
+  "stop_rule": "Complete preflight and six finite runs, preserve failures, independently recompute results; no adaptive hyperparameter search.",
+  "repair": "Frozen v1 reached episode100 and failed while logging duplicate status keyword. Source algorithms, training settings and seeds unchanged. Preserve v1; v2 overrides only the logging hook and repeats100-episode preflight."
+}

@@ -1,0 +1,15 @@
+claim_id,claim_summary,evidence_id,evidence_path,locator,verification_state
+C001,"原协议DeepSeek相对34维MAPPO失能率差-0.511 pp，区间[-1.732,+0.648]",E1,"reports/MAPPO_DeepSeek六小时开发实验报告_20261022.md","第14节：原设置",agent_checked_human_review_pending
+C002,"原协议DeepSeek相对规则计划失能率差+0.338 pp，区间[-0.795,+1.829]",E1,"reports/MAPPO_DeepSeek六小时开发实验报告_20261022.md","第14节：原设置",agent_checked_human_review_pending
+C003,"新库在弱/强监督设置相对规则计划分别为-1.833和-4.580 pp",E1,"reports/MAPPO_DeepSeek六小时开发实验报告_20261022.md","第14节：新协议",agent_checked_human_review_pending
+C004,"四组原生计划减同事件置换计划的区间均跨0",E1,"reports/MAPPO_DeepSeek六小时开发实验报告_20261022.md","第14节：内容审计",agent_checked_human_review_pending
+C005,"过程审计包含900回合和28016控制步，终点最大差7.11e-15",E2,"outputs/process_evidence_audit_20261022/analysis.json","verification",agent_checked_human_review_pending
+C006,"DeepSeek计划方向采用约47.7%-54.6%，容量采用约30.2%-39.8%，完整一致约10.1%-12.9%",E2,"reports/疏散过程证据与指标修正审计_20261022.md","计划到执行的链条",agent_checked_human_review_pending
+C007,"原疏散时间字段实为回合结束时间，失能也会使活跃队列减少",E2,"reports/疏散过程证据与指标修正审计_20261022.md","指标解释与结论边界",agent_checked_human_review_pending
+C008,"9个拥堵计划全部合法，费用0.024379元，首阶段8个0.50和1个0.25，无等待",E3,"reports/拥堵计划覆盖有限验证_20261022.md","调用与边界",agent_checked_human_review_pending
+C009,"扩充库减旧库-0.035 pp，区间[-0.806,+0.570]",E3,"outputs/congestion_plan_coverage_validation_20261022/analysis.json","effects.expanded_library - old_library",agent_checked_human_review_pending
+C010,"扩充库减置换计划+0.271 pp，区间[-0.660,+1.111]",E3,"outputs/congestion_plan_coverage_validation_20261022/analysis.json","effects.expanded_library - shuffled_congestion",agent_checked_human_review_pending
+C011,"16/16敏感性响应合法，9种签名，无关闭出口首阶段违规",E4,"outputs/deepseek_congestion_sensitivity_20261022/analysis.json","valid; unique_plan_signatures; unsafe_first_route_closed",agent_checked_human_review_pending
+C012,"严重度和趋势使加权有效放行量下降0.044和0.020，等待变化均为0",E4,"outputs/deepseek_congestion_sensitivity_20261022/analysis.json","sensitivity.severity; sensitivity.trend",agent_checked_human_review_pending
+C013,"敏感性验收未通过，新增训练步数0，最终测试场景未读取",E4,"outputs/deepseek_congestion_sensitivity_20261022/analysis.json","passed; new_training_steps; final_test_scenarios_loaded",agent_checked_human_review_pending
+C014,"敏感性验收费用0.046080元且凭据未记录",E4,"outputs/deepseek_congestion_sensitivity_20261022/analysis.json","ledger",agent_checked_human_review_pending

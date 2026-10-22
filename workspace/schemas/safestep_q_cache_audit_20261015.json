@@ -1,0 +1,22 @@
+{
+  "version": "1.0-posthoc-frozen-weight-Q-cache-audit",
+  "source": "outputs/safestep_shared_observation_20261014",
+  "source_config": "schemas/safestep_shared_observation_20261014.json",
+  "arms": ["hazard_full"],
+  "seeds": [141, 142, 143],
+  "scope": "All 96 existing full-observation DQN development/confirmation traces and their 120000 saved training transitions. Previously scored confirmation cases are now visible diagnostic evidence, not a fresh confirmation set.",
+  "Q_tolerance": 0.000001,
+  "cycle_definition": "A positional closed walk entirely at/after hazard onset; record last-visit interval and mark its member transitions. Time/FED observations still change, so this is not an identical full-state cycle.",
+  "reference": "Finite-horizon clairvoyant optimal action values under the exact training objective, including the 2-FED-unit timeout penalty. Interpret action ranking/calibration only after the hazard has appeared and the configured field remains constant. Not an online competing policy.",
+  "comparisons": ["Predicted selected Q versus exact post-reveal optimal Q for that forced first action", "Predicted selected Q versus saved greedy-policy suffix return (not the same reference as optimal Q)", "Final-network one-step Bellman residual, not historical training loss/targets", "All and final-replay-eligible training coverage, not actual minibatch sampling frequency"],
+  "context_coverage": {
+    "same_cell": true,
+    "time_window_steps": 4,
+    "personal_FED_tolerance": 0.01,
+    "normalized_FER_Linf_tolerance": 0.35,
+    "note": "Declared descriptive neighborhood, not a universal coverage threshold or proof of an unseen observation. Report exact match, neighborhood and broad cell/action coverage separately."
+  },
+  "representative": "For each trace, first post-reveal cycle-member action with offline ranking regret greater than tolerance; otherwise first cycle-member action; otherwise first post-reveal step. No selection by largest error.",
+  "checks": ["Reward/clock/dose/termination and masks remain consistent", "Training archives and prior artifacts unchanged", "Independent forward finite-horizon computation for every representative legal action", "No historical target-network weights or sampled minibatch indices imputed"],
+  "stop": "Complete one cache-only audit and report evidence-based next decision. No optimizer, new rollouts, parameter search, model edits, LLM calls or old sealed final-bank reads."
+}

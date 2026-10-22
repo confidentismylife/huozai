@@ -1,0 +1,43 @@
+{
+  "version": "1.0-bounded-exact-Q-supervised-diagnostic",
+  "question": "Can the unchanged 50-64-64-4 network learn calibrated action values and useful rankings when exact post-reveal stationary targets replace bootstrapping?",
+  "source_config": "schemas/safestep_shared_observation_20261014.json",
+  "source_round": "outputs/safestep_shared_observation_20261014",
+  "source_audit": "outputs/safestep_q_cache_audit_20261015",
+  "training_data": "Pool all saved hazard_full transitions from seeds141/142/143, keeping only k>=the original scenario onset. Use original effective observations unchanged. No validation examples or pre-reveal states in training; no random transition split claimed as independent validation.",
+  "teacher": "Decode current FER from the 50-feature observation and hold that snapshot stationary. Compute exact finite-horizon optimal forced-action Q under the existing -20*(dose+0.00125) objective and -40 timeout penalty. Labels are generated only in the restricted post-reveal constant-field task; no future onset/side information enters inputs or labels.",
+  "training": {
+    "seeds": [141, 142, 143],
+    "hidden_layers": [64, 64],
+    "initialization": "From scratch, same initial tensor fingerprint as original full DQN for each seed.",
+    "updates_per_model": 9873,
+    "batch_size": 64,
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "loss": "Mean squared error over all legal actions in each sampled batch, no bootstrap, auxiliary ranking loss, output clipping, gradient clipping, target normalization or early stopping.",
+    "sampling": "Uniform replacement minibatches from the pooled post-reveal archive; source trajectories remain correlated.",
+    "checkpoints": "Final weights only. All three models locked before any scored fit/validation/control evaluation.",
+    "torch_threads": 1,
+    "workers": 1
+  },
+  "validation": {
+    "centers": {"left": [6.25, 7.25], "right": [16.25, 17.25]},
+    "peaks": [0.005, 0.009, 0.011],
+    "onset": 0,
+    "starts": ["Room_B", "R14"],
+    "state_grid_k": [0, 32, 64, 96, 120, 127],
+    "state_grid_FED": [0.0, 0.05],
+    "scope": "12 new hazard profiles, 24 control start conditions. Synthetic state grid includes mathematically specified states, not reconstructed human histories. All evaluation fields are stationary and already visible. Existing old confirmation cases are development diagnostics; old sealed48 remain unread."
+  },
+  "evaluation_methods": ["snapshot_planner", "legacy_DQN_seed141", "legacy_DQN_seed142", "legacy_DQN_seed143", "supervised_Q_seed141", "supervised_Q_seed142", "supervised_Q_seed143"],
+  "ranking_tolerance": 0.000001,
+  "planned_control_episodes": 168,
+  "frozen_decision_rules": {
+    "training_fit": "For all three supervised models, pooled training legal-Q MAE<=0.15, optimal-action accuracy>=95%, and positive selected-Q fraction<=1%.",
+    "new_state_generalization": "For all three supervised models, overall new-state optimal-action accuracy>=95% and positive selected-Q fraction<=1%; separately report ordinary (k<=96) and near-deadline states, no hiding poor boundary values.",
+    "control_usable": "Each supervised model reaches all24 exits, has no positional closed walks in these stationary-field controls, and mean J<=1.05*the snapshot planner mean.",
+    "interpretation": "Success supports representational/optimization feasibility under exact all-action supervision; pooled data and all-action labels differ from original DQN, so no unique causal attribution to bootstrap. Failure under this fixed setting does not prove the architecture fundamentally incapable.",
+    "stop": "One three-model supervised round of 29619 optimizer updates; no additional RL updates, hyperparameter search or post-score extension. Complete and report even if criteria fail."
+  },
+  "limits": "Restricted single-person stationary synthetic task. Snapshot planning is already an exact online reference here; goal is approximate matching, not beating its optimum. No LLM, human behavior or original-paper numerical claim."
+}

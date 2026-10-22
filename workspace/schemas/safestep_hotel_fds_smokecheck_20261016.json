@@ -1,0 +1,36 @@
+{
+  "task": "Bounded FDS initialization, short numerical run and control diagnostics; no paper-effect reproduction",
+  "output_directory": "outputs/safestep_hotel_fds_smokecheck_20261016",
+  "source_candidate_directory": "outputs/safestep_hotel_fds_candidate_20261016",
+  "executable": "C:/Program Files/firemodels/FDS6/bin/fds_openmp.exe",
+  "process_environment": {
+    "prepend_PATH": ["C:/Program Files/firemodels/FDS6/bin/mpi", "C:/Program Files/firemodels/FDS6/bin"],
+    "I_MPI_ROOT": "C:/Program Files/firemodels/FDS6/bin/mpi",
+    "OMP_NUM_THREADS": "2"
+  },
+  "runtime_limits": {
+    "timeout_per_case_s": 240,
+    "maximum_hotel_input_repair_revisions": 3,
+    "maximum_hotel_physical_duration_s": 2.0,
+    "full_900s_fire_simulation_authorized_this_step": false
+  },
+  "temporary_parameters": {
+    "HCN_yield_kg_per_kg": 0.01,
+    "status": "ARBITRARY_NONZERO_SOFTWARE_FIXTURE_NOT_MEASURED_OR_PAPER_VALUE",
+    "reason": "Exercise nitrogen-containing reaction/species and all174 gas-output channels; never convert this diagnostic result to paper FED",
+    "ventilation_L_per_min": null,
+    "COHb_incapacitation_percent": null,
+    "equation_rate_time_unit": null
+  },
+  "planned_checks": [
+    {"case": "hotel_init_v1", "T_END_s": 0.0, "purpose": "Full inherited geometry and416 devices parsed/initialized"},
+    {"case": "hotel_short", "T_END_s": 2.0, "purpose": "Bounded numerical and174-channel export check, original100s/150C controls unchanged"},
+    {"case": "hotel_control_timers", "T_END_s": 2.0, "purpose": "Full-layout actuation diagnostic; door100s changed to0.5s and window temperature150C changed toTIME0.75s"},
+    {"case": "micro_temperature_cold", "T_END_s": 1.0, "ambient_C": 20.0, "purpose": "Separate minimal geometry:150C gas trigger must remain inactive; door opens0.5s"},
+    {"case": "micro_temperature_hot", "T_END_s": 1.0, "ambient_C": 160.0, "purpose": "Same minimal geometry:150C gas trigger must create window hole; door opens0.5s"}
+  ],
+  "claims_excluded": ["OriginalHCN_yield_recovered", "OriginalFER_or_FED_reproduced", "Window_glass_physics_validated", "Full_fire_numerical_stability_validated", "Original_small_case62percent_reproduced"],
+  "training_updates": 0,
+  "LLM_requests": 0,
+  "sealed_final48_scenarios_read": false
+}

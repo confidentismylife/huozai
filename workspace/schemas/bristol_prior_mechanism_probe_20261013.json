@@ -1,0 +1,37 @@
+{
+  "version": "1.0-frozen-before-inference",
+  "question": "Does changing or removing an explicit baseline probability change scene differentiation by the fixed Qwen3 4B predictor?",
+  "scope": "Output-mechanism diagnostic; no human outcome scoring, prompt selection, evacuation-control claim or population inference.",
+  "source_manifest": "outputs/bristol_context_choice_benchmark_20261013/frozen_LLM_manifest.json",
+  "mirror_pairs": [
+    {"pair_id": "busy_less_used_nearer", "conditions": [[20, 40, 2], [40, 20, 2]]},
+    {"pair_id": "free_more_used_nearer", "conditions": [[2, 4, 1], [4, 2, 1]]},
+    {"pair_id": "busy_one_unused_no_map", "conditions": [[20, 0, 0], [0, 20, 0]]}
+  ],
+  "arms": [
+    {"arm": "no_prior", "prior": null},
+    {"arm": "prior_20", "prior": 0.2},
+    {"arm": "prior_80", "prior": 0.8}
+  ],
+  "prior_semantics": "0.2 and 0.8 are deliberate synthetic perturbations, not estimates of the dataset's actual training frequencies. They retain the original input field name for this diagnostic.",
+  "system_sentence_original": "Use only the current scene and the baseline left-choice probability estimated from other conditions.",
+  "system_sentence_replacement": "Use only the current scene and, when provided, the baseline left-choice probability estimated from other conditions.",
+  "prompt_change_disclosure": "One sentence makes the prior optional; every new arm uses this identical system prompt. Comparison to the old 34 requests is not a one-factor causal contrast.",
+  "random_run_order_seed": 2026101322,
+  "expected_requests": 18,
+  "replication": "One stateless temperature-zero response per scene-arm; six selected scenes in three mirror pairs, not independent human participants. No p-values or confidence intervals.",
+  "metrics": ["per-scene (p_80-p_20)/0.6", "exact prior copying", "same-prior mirror scene contrasts", "no-prior scene range", "no-prior and complementary-prior mirror errors", "format failures", "latency"],
+  "invalid_output_policy": "Preserve raw response/error; missing prediction stays null. No fallback, repair calls or prompt tuning.",
+  "max_consecutive_errors": 3,
+  "exact_copy_tolerance": 1e-12,
+  "LLM": {
+    "model": "qwen3:4b",
+    "digest": "359d7dd4bcdab3d86b87d73ac27966f4dbb9f5efdfcc75d34a8764a09474fae7",
+    "options": {"temperature": 0, "seed": 2026101321, "num_ctx": 1536, "num_predict": 32, "num_thread": 8, "num_batch": 32, "num_gpu": 0},
+    "think": false,
+    "keep_alive": "2m"
+  },
+  "old_final_scenarios": "not_accessed",
+  "Liao_confirmation_scores": "not_computed",
+  "PPO_updates": 0
+}

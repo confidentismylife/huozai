@@ -1,0 +1,78 @@
+{
+  "version": "1.0",
+  "date_local": "2026-10-18",
+  "question": "Can agreement between fixed history-based forecast models reduce harmful routing changes while retaining benefits under synthetic trend changes, measurement noise and timestamped latency?",
+  "evidence_status": "Known-fire development plus frozen-seed synthetic stress confirmation. Synthetic perturbations are not new physically validated fires.",
+  "source_directory": "outputs/safestep_paper_numerics_20261015/author_repository",
+  "output_directory": "outputs/safestep_robust_gate_20261018",
+  "departure_fire_times_s": [250, 300, 450, 600],
+  "maximum_actions": 45,
+  "dt_s": 6.666666666666667,
+  "development_seeds": [18101, 18102, 18103, 18104],
+  "synthetic_confirmation_seeds": [18201, 18202, 18203, 18204, 18205, 18206, 18207, 18208, 18209, 18210, 18211, 18212, 18213, 18214, 18215, 18216, 18217, 18218, 18219, 18220, 18221, 18222, 18223, 18224, 18225, 18226, 18227, 18228, 18229, 18230, 18231, 18232, 18233, 18234, 18235, 18236, 18237, 18238, 18239, 18240, 18241, 18242, 18243, 18244, 18245, 18246, 18247, 18248, 18249, 18250, 18251, 18252, 18253, 18254, 18255, 18256, 18257, 18258, 18259, 18260],
+  "truth_families": ["accelerating_local", "transient_local"],
+  "sensors": [
+    {"id": "clean", "noise_cv": 0.0, "latency_s": 0.0},
+    {"id": "noise10", "noise_cv": 0.1, "latency_s": 0.0},
+    {"id": "noise30", "noise_cv": 0.3, "latency_s": 0.0},
+    {"id": "lag15", "noise_cv": 0.0, "latency_s": 15.0},
+    {"id": "noise10_lag15", "noise_cv": 0.1, "latency_s": 15.0},
+    {"id": "noise30_lag15", "noise_cv": 0.3, "latency_s": 15.0}
+  ],
+  "source_only_sensor_arms": ["noise10_lag15", "noise30_lag15"],
+  "generator": {
+    "shared_source": "One original public FER field, 58 distinct region labels and 61 nonexit graph cells",
+    "spatial_shape": "Two seeded random region centres. Weight exp(-0.5*(region graph distance / width)^2), width uniform[2,5] graph moves; shared region cells receive identical rates",
+    "amplitude_FER_per_s": [0.003, 0.02],
+    "onset_fire_s": [220, 560],
+    "accelerating_local": "Two nonnegative local additions: amplitude * clip((t-onset)/120,0,1)^2; persistent thereafter",
+    "transient_local": "Two nonnegative triangular pulses, independent seeded rise and fall durations uniform[30,90] seconds",
+    "noise": "Mean-one multiplicative lognormal noise, standard deviation / mean = noise_cv, independent by region and native sample; reuse standard normal draws across matched sensor arms",
+    "latency": "Native acquisition timestamps retained; only samples with acquisition+latency <= decision time are delivered. Never mislabel stale data as current.",
+    "normalization": "No full-fire statistics used to choose perturbation amplitudes or online model parameters",
+    "physical_claim": "Mathematical stress fields only; no claim to satisfy combustion or smoke-transport equations"
+  },
+  "forecast_models": [
+    {"id": "trend30", "window_s": 30, "projection_cap_s": 60, "slope_gain": 1.0},
+    {"id": "half30", "window_s": 30, "projection_cap_s": 60, "slope_gain": 0.5},
+    {"id": "trend60", "window_s": 60, "projection_cap_s": 60, "slope_gain": 1.0}
+  ],
+  "primary_methods": ["snapshot_hold", "trend30", "half30", "ensemble_mean", "consensus_gate", "switch_margin_gate", "full_future_reference"],
+  "gate": {
+    "nominee": "Full fixed plan from the arithmetic mean of the three forecast interval-cost matrices",
+    "comparator": "Full snapshot-optimal fixed plan from the same state/time/deadline",
+    "score": "Score the SAME nominee and SAME comparator under each forecast model; minimum relative predicted FED gain across models",
+    "relative_gain_denominator_floor": 1e-12,
+    "consensus_threshold": 0.05,
+    "switch_margin": {"initial": 0.05, "same_nominated_exit_as_previous_selected_plan": 0.01, "different_nominated_exit": 0.10},
+    "application": "Only a different first action is a gate opportunity. Execute first action and replan; rejection executes snapshot first action.",
+    "uncertainty_interpretation": "Forecast-model disagreement, not a calibrated predictive confidence interval or safety guarantee",
+    "fixed_cost_accounting": "No added dose penalty or action mask; switching thresholds are heuristic and tested for possible harm"
+  },
+  "development_only_sensitivity": [
+    {"id": "consensus_gate_low", "threshold": 0.02},
+    {"id": "consensus_gate_high", "threshold": 0.10}
+  ],
+  "execution": {
+    "context": "Original clean source at four departures once; diagnostic only",
+    "development": "4 seeds x 14 arms = 56 worlds; 9 methods including two threshold sensitivities",
+    "confirmation": "60 fresh seeds x 14 arms = 840 worlds; seven primary methods unchanged",
+    "expected_worlds": 897,
+    "expected_episodes": 1559404,
+    "generation_order": "Context, development, then confirmation. All method, threshold, generator and seed hashes frozen before any new scoring; no method selection between stages.",
+    "max_compute_wall_s": 5400,
+    "memory": "Process and write one world at a time; gzip traces, npz policy tables; no LLM model loading",
+    "resume": "Completed world manifests must verify; never overwrite completed world outputs",
+    "stop": "After the planned matrix, independent audit and one report; do not expand the matrix based on a favorable or unfavorable result"
+  },
+  "evaluation": {
+    "paired_tolerance_FED": 1e-10,
+    "outcomes": ["arrival", "FED", "maximum FED", "paired benefit/harm counts", "travel time", "immediate reversals", "selected-plan exit changes", "planning time"],
+    "gate_confusion": "At each gate opportunity visited by that gated policy, use offline truth to compare one nominee action then snapshot continuation against snapshot continuation. Count rejected beneficial and accepted harmful opportunities separately; overlapping opportunities are not independent outcomes.",
+    "fairness": "All online methods share map, acquisition/delivery timestamps, measured histories, action constraints, deadline and objective; gates use more planning work, which is reported. Oracle has future information and is only a reference.",
+    "confirmation_statement": "Only fresh generator/noise seed confirmation. Shared base fire, topology and generator prohibit claims of independent-fire generalization.",
+    "statistics": "Descriptive arm and world aggregates; no trajectory-level independent-sample significance tests",
+    "failure": "Never count partial FED as low-dose success; report arrivals and jointly reached comparisons"
+  },
+  "scope": {"training_updates": 0, "LLM_API_requests": 0, "FDS_runs": 0, "sealed_final48_accessed": false}
+}

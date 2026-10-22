@@ -1,0 +1,23 @@
+{
+  "version": "1.0-post-hoc-read-only-diagnosis",
+  "status": "Exploratory plan written after interrupted checkpoint scores were known; not a preregistration",
+  "input_audit": "outputs/safestep_paper_stepwise_timeout_audit_20261015/audit_summary.json",
+  "output_directory": "outputs/safestep_paper_stepwise_timeout_audit_20261015/cached_failure_diagnosis",
+  "seeds": [141, 142, 143],
+  "checkpoint_rule": "Reuse the already frozen latest fully journalled checkpoint; never select by policy performance",
+  "analyses": [
+    "Classify every cached greedy trajectory as exit arrival, blocked self-loop, or multi-cell cycle; check cycle repeats through the recorded end",
+    "Recompute all 61 greedy actions from the selected checkpoint and match every cached trajectory transition against geometry",
+    "Count illegal greedy actions and action frequencies over the 61 non-exit cells",
+    "Count visited (cell, action) groups with variable immediate rewards in the verified training prefix; save five largest-range observed examples with hidden time, FED and visit context",
+    "Compute episode and control-step shares of failed training episodes in the verified prefix and the last 1000 recorded episodes"
+  ],
+  "non_claims": [
+    "No causal attribution among update frequency, loss, terminal handling, target sync and exploration assumptions",
+    "No finite-horizon final model scores, no checkpoint selection by success rate, no significance test or new external validation",
+    "Position-only observation aliasing is documented as an input limitation, not proved to be the cause of the failed training"
+  ],
+  "training_updates": 0,
+  "LLM_requests": 0,
+  "old_final48_crowd_scenarios_accessed": false
+}

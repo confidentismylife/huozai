@@ -1,39 +1,17 @@
-# Credentials and local configuration
+# Full backup requested: exclude only credentials and local restore destinations.
 .env
 .env.*
-*.key
-*.pem
-*credential*
-*secret*
-
-# Model and API caches
-cache/
-caches/
-responses/
-api_responses/
-*.jsonl
-
-# Raw data, outputs and local artifacts
-data/
-output/
-outputs/
-artifacts/
-tmp/
-*.log
-*.zip
-*.pdf
-*.xlsx
-*.pptx
-
-# Python and editors
-__pycache__/
-.pytest_cache/
-.venv/
-*.py[cod]
-.idea/
-.vscode/
-
-# Operating systems
-.DS_Store
-Thumbs.db
-
+.git-credentials
+.netrc
+**/secrets/
+**/auths/
+**/credentials/
+**/.sandbox-secrets/
+*.dpapi
+*.pfx
+*.p12
+id_rsa
+id_ed25519
+auth.json
+/restored_backup/
+/verification_restore/

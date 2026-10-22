@@ -1,0 +1,250 @@
+"""Build source-backed tables, general manuscript figures, and execution report."""
+from pathlib import Path
+from datetime import datetime, timezone
+import hashlib
+import json
+import csv
+import numpy as np
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+from matplotlib import font_manager
+
+ROOT=Path(__file__).resolve().parents[1]
+OUT=ROOT/'outputs/research_convergence_20261011'
+ART=ROOT/'artifacts/research_convergence_20261011'
+LABELS={'current':'当前观测','public_history':'普通历史','response':'响应表示','constant':'常数预测',
+        'no_advice_all_reject':'无建议／全部拒绝','first_eligible_only':'仅首次覆盖'}
+VARIANTS=['current','public_history','response','constant']
+
+
+def read(name):return json.loads((OUT/name).read_text(encoding='utf-8'))
+
+
+def write(path,text):
+    assert not path.exists(),path
+    path.write_text(text,encoding='utf-8')
+
+
+def link(path,label):return f'[{label}]({path.as_posix()})'
+
+
+def main():
+    s=read('comparison_summary.json');a=read('audit_summary.json');q=read('verification.json')
+    assert q['status']=='passed' and not s['passed']
+    ART.mkdir(exist_ok=False)
+    font_manager.fontManager.addfont('C:/Windows/Fonts/msyh.ttc')
+    font=font_manager.FontProperties(fname='C:/Windows/Fonts/msyh.ttc').get_name()
+    settings={'font.family':font,'axes.unicode_minus':False,'font.size':10,
+              'axes.spines.top':False,'axes.spines.right':False,'pdf.fonttype':42,
+              'savefig.facecolor':'white'}
+    colors=['#0072B2','#D55E00','#009E73','#666666']
+    markers=['o','s','^','D','v']
+    scenes=sorted(a['scenarios'])
+    source=[]
+    for v in VARIANTS:
+        pm=s['methods'][v]['prediction_metrics']
+        source.append(dict(method=v,incap_MAE_pp=100*pm['MAE'][0],FED_MAE=pm['MAE'][1],
+                           incap_bias_pp=100*pm['prediction_minus_target_bias'][0],
+                           FED_bias=pm['prediction_minus_target_bias'][1]))
+    with plt.rc_context(settings):
+        fig,axes=plt.subplots(1,2,figsize=(10.2,5.0))
+        fig.subplots_adjust(left=.08,right=.98,bottom=.27,top=.81,wspace=.30)
+        for target,ax in enumerate(axes):
+            values=[s['methods'][v]['prediction_metrics']['MAE'][target]*(100 if target==0 else 1) for v in VARIANTS]
+            ax.bar(range(4),values,color=colors,width=.54,alpha=.28,edgecolor=colors,zorder=2)
+            for i,scene in enumerate(scenes):
+                data=[s['methods'][v]['scene_metrics'][scene]['MAE'][target]*(100 if target==0 else 1) for v in VARIANTS]
+                ax.scatter(np.arange(4)+(i-2)*.085,data,s=34,color='#303030',marker=markers[i],zorder=3,
+                           label=scene if target==1 else None)
+            for i,value in enumerate(values):ax.annotate(f'{value:.4f}' if target==0 else f'{value:.5f}',(i,value),xytext=(0,5),textcoords='offset points',ha='center',fontsize=9,color=colors[i])
+            ax.set_xticks(range(4),[LABELS[v] for v in VARIANTS]);ax.set_ylim(bottom=0)
+            ax.set_ylabel('失能率差的MAE（百分点）' if target==0 else '平均累计FED差的MAE（无量纲）')
+            ax.grid(axis='y',alpha=.2,zorder=0)
+            ax.set_title('A  失能预测误差' if target==0 else 'B  烟气暴露预测误差',loc='left',fontweight='bold')
+        fig.suptitle('固定场景留出比较：响应表示没有超过常数基线',fontsize=13,y=.95)
+        axes[1].legend(loc='upper center',bbox_to_anchor=(-.16,-.17),ncol=5,fontsize=8,frameon=False)
+        fig.text(.08,.06,'柱：20个人口家族等权平均；点：5个同图参数场景的留出误差。72个去重状态。\n每折12家族拟合、4家族经验校准、4家族留出；图中散点表示场景差异，不是独立建筑或置信区间。',fontsize=9)
+        for ext in ('png','pdf'):fig.savefig(ART/f'representation_errors.{ext}',dpi=220)
+        plt.close(fig)
+        methods=['current','public_history','response','constant','first_eligible_only']
+        cats=['beneficial','harmful','small_or_neutral'];catlabels=['有益','有害','微小／中性']
+        catcolors=['#0072B2','#D55E00','#999999'];hatches=['','///','..']
+        fig,axes=plt.subplots(1,2,figsize=(10.2,5.1),sharey=True)
+        fig.subplots_adjust(left=.13,right=.98,bottom=.25,top=.80,wspace=.14)
+        for ax,operation,title in zip(axes,['accept_','reject_'],['A  接受的建议','B  拒绝的建议']):
+            left=np.zeros(len(methods))
+            for cat,label,color,hatch in zip(cats,catlabels,catcolors,hatches):
+                values=[s['methods'][v]['gate']['confusion'][operation+cat] for v in methods]
+                ax.barh(range(len(methods)),values,left=left,color=color,hatch=hatch,edgecolor='#333333',linewidth=.4,label=label)
+                for i,(start,value) in enumerate(zip(left,values)):
+                    if value:ax.text(start+value/2,i,str(value),ha='center',va='center',color='white' if cat!='small_or_neutral' else '#111111',fontsize=9)
+                left+=values
+            ax.set_yticks(range(len(methods)),[LABELS[v] for v in methods]);ax.set_xlim(0,76)
+            ax.set_xlabel('建议机会数');ax.grid(axis='x',alpha=.2);ax.set_axisbelow(True)
+            ax.set_title(title,loc='left',fontweight='bold')
+        axes[0].invert_yaxis();axes[1].legend(loc='upper center',bbox_to_anchor=(-.12,-.17),ncol=3,frameon=False)
+        fig.suptitle('接受与拒绝取舍：响应门控接受10次，其中7次有害',fontsize=13,y=.95)
+        fig.text(.13,.04,'总计72个机会：21有益、23有害、28微小／中性；按同状态配对未来均值及既定0.001容差分类。\n经验余量门控；单次动作的影子结果，未运行这套新门控的完整回合。常数门控与全部拒绝计数一致。',fontsize=9)
+        for ext in ('png','pdf'):fig.savefig(ART/f'gate_tradeoffs.{ext}',dpi=220)
+        plt.close(fig)
+    prediction_table='| 表示 | 失能MAE（百分点） | FED MAE | 失能偏差（百分点） | FED偏差 |\n|---|---:|---:|---:|---:|\n'
+    for r in source:prediction_table+=f"| {LABELS[r['method']]} | {r['incap_MAE_pp']:.4f} | {r['FED_MAE']:.6f} | {r['incap_bias_pp']:+.4f} | {r['FED_bias']:+.6f} |\n"
+    gate_table='| 门控／诊断 | 接受总数 | 接受有益 | 接受有害 | 接受微小／中性 | 拒绝有益 | 拒绝有害 |\n|---|---:|---:|---:|---:|---:|---:|\n'
+    for v in [*VARIANTS,'no_advice_all_reject','first_eligible_only']:
+        g=s['methods'][v]['gate'];c=g['confusion']
+        gate_table+=f"| {LABELS[v]} | {g['accepted']} | {c['accept_beneficial']} | {c['accept_harmful']} | {c['accept_small_or_neutral']} | {c['reject_beneficial']} | {c['reject_harmful']} |\n"
+    scene_table='| 留出场景 | 去重状态 | 当前观测FED MAE | 普通历史FED MAE | 响应FED MAE | 常数FED MAE |\n|---|---:|---:|---:|---:|---:|\n'
+    for scene in scenes:
+        vals=[s['methods'][v]['scene_metrics'][scene]['MAE'][1] for v in VARIANTS]
+        scene_table+=f"| {scene} | {a['scenarios'][scene]} | "+' | '.join(f'{x:.6f}' for x in vals)+' |\n'
+    tables=prediction_table+'\n'+gate_table+'\n'+scene_table
+    write(OUT/'core_tables.md',tables)
+    with (OUT/'figure_source_errors.csv').open('w',encoding='utf-8-sig',newline='') as f:
+        w=csv.DictWriter(f,fieldnames=list(source[0]));w.writeheader();w.writerows(source)
+    figure_meta=dict(audience='Group meeting and general manuscript draft; journal format not selected.',
+        sample='72 deduplicated states,20 scene/population families,5 parameter scenarios on one graph.',
+        errors='Family-weighted held-out mean absolute error, bias=prediction-target; scene dots show spread, no error bars.',
+        gate='Unweighted opportunity counts on common cached paths; labels from paired single-action terminal means.',
+        uncertainty='Conditional bootstrap intervals are in report; these plots show descriptive summaries and scene spread.',
+        sources=[str(OUT/'comparison_summary.json'),str(OUT/'primary_rows.json')],
+        colors_and_markers='Color plus marker/hatching/direct numeric labels; accessibility certification not claimed.',
+        matplotlib_version=matplotlib.__version__,dimensions_inches={'representation_errors':[10.2,5.0],'gate_tradeoffs':[10.2,5.1]},
+        PNG_DPI=220,formats=['png','pdf'],created_at_utc=datetime.now(timezone.utc).isoformat(),
+        files={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in ART.iterdir()})
+    write(ART/'figure_provenance.json',json.dumps(figure_meta,ensure_ascii=False,indent=2))
+    report=f'''# 缓存审计、响应收益比较与研究收敛执行报告
+
+日期：2026年10月11日。性质：既有开发缓存上的描述性分析及停止决定；不是新最终评估，也不是独立建筑验证。
+
+## 1. 本轮已经完成什么
+
+本轮已经完成研究问题与角色整理、严格公开信息审计、一次固定轻量表示比较、结果复核，以及聚焦论文初稿。比较未通过预先冻结的继续条件，因此停止扩大人群响应收益门控分支，没有进入条件性新人口确认。
+
+| 工作量 | 实际完成 |
+|---|---:|
+| 本轮读取的旧建议记录 | 248 |
+| 主共同轨迹原始机会 | 88 |
+| 主共同轨迹去重后状态 | 72 |
+| 全部三种父策略路径去重状态，审计用途 | 80 |
+| 场景／人口家族 | 20 |
+| 同图参数场景 | 5 |
+| 固定岭回归拟合 | 15次：3种表示×5折 |
+| 常数基线拟合 | 5次 |
+| 已保存的留出预测 | 288条：72状态×4预测方法 |
+| 新PPO训练、新LLM请求、新疏散回合 | 均为0 |
+| 读取保留最终场景 | 0 |
+
+本轮确实拟合了轻量监督预测器。“没有新训练”如见于简写计数，专指没有新PPO训练；不能理解成没有拟合任何模型。原来的2,080回合、2,480条反事实、102,632个控制步是本轮复用的历史数据，不计为新运行。
+
+## 2. 把研究问题固定下来
+
+主问题是：**在当前简化仿真里，能否用决策时能看到的信息，判断某个高层候选是否值得替换既有PPO动作？** 只有门控成立后，才能进一步比较同门控下规则候选与LLM候选的差异。
+
+目前实际做的是LLM高层建议＋PPO控制。老师最初提出的LLM疏散者＋RL引导，依赖另一条真人行为校准链；不能把本轮结果写成已经实现并验证了真人疏散智能体。
+
+## 3. 信息来源与时间顺序
+
+| 输入／字段 | 处理 | 限制 |
+|---|---|---|
+| 34维决策时观测 | 清空建议坐标28—32；保留物理、预测及放行记忆 | 不能解释为新增真实传感器验证 |
+| PPO基础动作、候选动作 | 两个9维独热编码 | 标签对应这个具体候选，不是候选库最优答案 |
+| 此前建议、执行覆盖次数 | 只累计已完成步骤 | 当前观测方案也含这两个计数 |
+| 历史区域人数、烟气、容量、预测、指示、执行动作和放行 | 固定最多3个已完成步骤；普通历史与响应方案完全共享 | 无法将此结果推广到较长历史 |
+| 历史两支路进入人数 | 作为假定可观测流量；普通历史对照也收到同样原始字段 | 现实需流量观测装置；没有验证测量误差 |
+| 跟随指示比例、队列清空、吞吐利用率 | 同一历史的确定性变换 | 流量受容量影响，不能叫因果服从率 |
+| 推断的出口人数 | 仅在公开烟气累计上界小于失能阈值时启用 | 依赖该模拟器初始FED为0、无其他人数流失、记录精度及固定更新顺序；不作现实安全上界 |
+| 行为编号、人口种子、权重编号、隐藏个体与未来FED | 排除在线特征 | 仅离线归组、去重和结果分解使用身份；终点结果仅作为标签 |
+
+原稿普通历史没有流量字段，因此与响应表示的信息量不一致。本轮在新模块中修正，保留原稿原样。普通历史170维，响应187维；后者在前者完整向量后追加17项摘要。当前观测54维，包含34维观测、18维动作编码及2个历史计数。每项特征只读取当前观测或严格早于当前决策的完整历史；当前动作执行后的流量不进入该决策特征。
+
+## 4. 去重与收益反转
+
+248条记录包括不同门控父路径和即时／延迟回放副本，不能当作248个独立样本。相同人口、行为、权重、时刻、基础及候选动作、完成路径、观测和公开记忆合并；重复记录的特征与配对终点差须一致。所有父路径合并后80个唯一状态；主分析仅使用持续建议preserve_always共同路径的72个唯一状态。
+
+这72个状态来自20家族，48个发生在第3步、24个发生在第0步；即最多15秒的此前观测。它们仅覆盖产生建议机会的602、604、605三套权重；601、603在这批主机会中没有样本。五套权重出现在原完整实验，不等于本次收益样本覆盖五套权重。
+
+类别为21有益、23有害、28微小／中性。完整公开历史只有48种不同输入，其中3个输入单元同时含有益和有害标签。新增历史让当前特征单元从47变为48；响应摘要仍为48，未拆开更多输入单元。这是此缓存的事实，不代表特征工程一般无用。
+
+已知反转对重新核对如下：
+
+| 同场景AULL0019、权重604、第15秒 | 候选−PPO失能差 | 候选−PPO FED差 |
+|---|---:|---:|
+| 人口1497101301，概率行为 | 0 | +0.001212877177 |
+| 人口1497101302，规则行为 | 0 | −0.009771520627 |
+
+两例当前观测、三步完成历史、原始流量及全部响应表示均相同。前三步北／南支路流量分别均为[0,0]、[6,3]、[6,3]。因此这些输入的任何确定性变换都无法逐例区分二者；但模型仍可能学习这种输入的平均收益。标签由有限仿真未来估计，不能据此证明所有可测量信息都无用，也不能把未来差异全部归因于隐藏行为。
+
+## 5. 唯一一轮比较怎样做
+
+分析前另存冻结协议，固定三种表示、岭回归alpha=1、历史窗口、分组、校准和继续标准，之后没有调参。每次完整留出一个场景：其4人口家族全部用于留出；其余场景人口重复0—2用于拟合，重复3用于经验校准。每折12拟合家族、4校准家族、4留出家族。同人口的行为、权重、时刻和未来副本始终同组；标准化和常数均值只用拟合部分。
+
+标签分别是失能率差与平均累计FED差，负值更好。从相同状态强制候选或PPO一步，随后两支都执行相同无建议PPO直到终点。随机未来在状态内配对后求均值，规则行为1个未来，概率行为4个未来；未来不增加独立状态数。每个人口家族在误差统计中总权重为1。
+
+门控将预测加上经验不利残差余量；失能上界不允许增加，且失能或FED至少改善0.001才接受。余量来自校准家族内最差残差的0.9经验分位，每折只有4校准家族，因此实际上是这些家族中的最大值；它没有90%覆盖保证。无余量门控只作诊断，没有据此重新选择门控。
+
+冻结的继续标准要求：相对普通历史和常数都有至少0.001的总体FED MAE下降，各至少3个场景改善，失能MAE不变差，不接受已知有害或失能增加建议，并在至少2场景、2权重接受有益建议。0.001沿用此前重要收益容差；这是研究资源分配标准，不是现实安全认证标准。
+
+## 6. 预测误差结果
+
+{prediction_table}
+
+偏差=预测−配对终点标签。失能MAE以百分点显示，FED无量纲，两项不可直接相加。
+
+响应相对普通历史FED MAE下降0.000342，约3.5%，条件性重采样区间[−0.000036,+0.000692]跨0；未达到0.001阈值。失能MAE反而增大0.01269个百分点。响应相对常数FED MAE增加0.002273、失能MAE增加0.30929个百分点；FED误差约大31.8%。常数更好的预测平均误差不能证明它识别了有益动作；它在经验余量门控下全部拒绝。
+
+![预测误差与5个场景的差异]({(ART/'representation_errors.png').as_posix()})
+
+{scene_table}
+
+响应FED误差在4/5场景略低于普通历史，但没有一个场景低于常数。简单的“4个场景有所改善”不足以构成继续证据。区间使用固定留出预测上的2000次场景内人口家族配对重采样、种子2026101131；未重新拟合，未包含训练估计不确定性，不代表独立建筑外推区间。
+
+## 7. 门控究竟接受和拒绝了什么
+
+{gate_table}
+
+响应方案接受10次：7有害、3微小／中性、0有益；拒绝全部21个有益和16个有害。按均值标签计算，有害拦截16/23≈69.6%，有益识别0/21；5个接受机会增加了平均失能率。7个再次建议接受全部有害，另3个首次接受微小／中性。
+
+当前观测门控接受5个有益也接受7个有害；普通历史接受0个有益和3个有害。仅首次覆盖作为诊断接受16个有益、10个有害，说明缩减到首次不是可靠收益识别。全部拒绝拦住23个有害，同时错过21个有益，不能算预测成功。
+
+![接受与拒绝取舍]({(ART/'gate_tradeoffs.png').as_posix()})
+
+响应方案人口家族层面的不利残差覆盖为失能55%、FED90%；按家族内状态加权的覆盖为失能80%、FED约96.7%。这些覆盖仅针对配对未来均值标签，并非每个随机未来或新建筑的保证。预测判断失能不增加，不等于真实模拟均值不增加。
+
+接受动作的隔离反事实贡献，响应方案为失能+0.12370个百分点、FED+0.001381，当前观测为失能−0.07813个百分点、FED+0.000906。它们只是在共同缓存路径上对单次动作差加权，不是新门控的完整闭环疏散效果，不能把前者写成“新门控完整回合实际增加0.12370个百分点失能”。新策略完整回合没有运行。
+
+去掉经验余量，响应门控会接受40次，包含10有益、14有害、16微小／中性；仍不能通过，不能据此改成较宽松策略并称优化成功。
+
+## 8. 怎样解释失败
+
+第一，采样机会太早，最多三步响应不能充分反映隐藏人口及未来反应。第二，同公开历史确实存在收益反转，但只能对这些具体输入、有限未来与候选成立。第三，有效样本量是20个人口家族、5个同图场景，并非248条独立建筑样本；每折36—48个状态面对170或187维输入，固定岭回归仍可能受到共线性、维度及域变化影响。第四，经验校准只有4家族，遇到场景变化时没有保护保证。第五，候选收益与接受风险需要分开评价，略降FED误差并不代表正确覆盖PPO。
+
+本轮没有把身份喂给模型，也没有发现必须依靠未来标签作为在线输入的实现泄漏。这不排除缓存选择带来的偏差：只观察到父策略产生的建议机会，不能说明无建议状态或其他候选动作的收益分布。已经反复研究过的开发缓存也不是新的盲测集。
+
+## 9. 已经执行的继续／停止决定
+
+冻结的7项继续要求全部未通过。决定是：**停止扩大当前响应表示＋固定岭回归收益门控分支，保留代码和负结果；本轮不启动新人口确认。** 这不是认定所有响应特征无效，也不是认定所有LLM无效。它说明在此候选、早期历史、数据规模、预测器及分组方式下，没有建立值得增加实验预算的证据。
+
+论文现在围绕“有效性与失效机制”写：同条件LLM额外收益尚未建立；方向与容量相互影响；再次采纳收益可变；当前信息存在局部不可辨别；有限经验余量不能保证可靠选择。后续如果重新进入方法改进，必须先形成真正改变信息来源或问题设置的具体假设和新协议，不能继续在这些留出结果上调参寻找正例。
+
+## 10. 本轮文件与复核
+
+- {link(ROOT/'reports/研究主线与证据一页说明_2026-10-11.md','一页研究问题、角色图、证据和论文目录')}
+- {link(ROOT/'reports/LLM辅助火灾疏散控制_聚焦论文初稿_2026-10-11.md','聚焦论文初稿')}
+- {link(OUT/'audit_summary.json','缓存审计原始结果')}；{link(OUT/'primary_rows.json','72个去重状态与特征／标签')}。
+- {link(OUT/'frozen_comparison_protocol.json','冻结比较协议')}；{link(OUT/'comparison_summary.json','比较完整结果')}；{link(OUT/'held_out_predictions.csv','288条留出预测')}。
+- {link(OUT/'outer_fold_models.json','20个固定拟合结果')}；{link(OUT/'verification.json','结果复核')}。
+- {link(ART/'representation_errors.pdf','误差图PDF')}；{link(ART/'gate_tradeoffs.pdf','门控图PDF')}；{link(ART/'figure_provenance.json','图形来源记录')}。
+
+已有5项初稿检查和4项新增信息对等／历史边界检查共9项通过。另从保存参数独立重算288条预测、门控决策、家族权重误差、分组和分母，全部匹配。275个本轮保护的历史文件及冻结协议来源哈希保持一致；原始响应预测模块未修改。未读取48个最终情景。
+
+这份报告和初稿是本轮完成的收敛交付。目标期刊、新颖性完整核查、真实烟气和建筑验证、最终封存评估均未完成，不能称论文已经具备投稿或现场部署资格。
+'''
+    dest=ROOT/'reports/缓存审计与响应收益比较_收敛执行报告_2026-10-11.md'
+    write(dest,report)
+    write(OUT/'learning_counts.json',json.dumps(dict(new_ppo_training=0,new_llm_training=0,ridge_fits=15,constant_fits=5,
+        note='comparison_summary.new_training=0 refers to no PPO training; lightweight supervised fits were performed.'),ensure_ascii=False,indent=2))
+    print(json.dumps(dict(report=str(dest),figures=str(ART),tables=str(OUT/'core_tables.md')),ensure_ascii=False))
+
+
+if __name__=='__main__':main()

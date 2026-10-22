@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "task": "Static, source-traceable hotel FDS reconstruction candidate; not the author's original case",
+  "output_directory": "outputs/safestep_hotel_fds_candidate_20261016",
+  "source_template": "outputs/safestep_gap_material_search_20261016/materials/example_commercial.fds",
+  "source_template_sha256": "b66d3b6954991bb53814462193b5718e41e388f13ecbb2b80d10975bbd422c67",
+  "source_template_commit": "428a4153239efa9c4c4b6b20670990c52eaf926a",
+  "source_template_git_blob": "577b0e742ef9bc2ce327cacebc721a53a6bd58bd",
+  "source_mapping": "outputs/safestep_paper_numerics_20261015/author_repository/coordinates2areanumber.py",
+  "paper_doi": "10.1016/j.jobe.2025.115132",
+  "paper_confirmed": {
+    "ambient_temperature_C": 20.0,
+    "relative_humidity_percent": 40.0,
+    "fire_room": 24,
+    "fire_location_description": "centre of Room 24",
+    "peak_HRR_kW": 5000.0,
+    "time_to_peak_s": 326.0,
+    "growth": "t-squared",
+    "CO_yield_kg_per_kg": 0.042,
+    "soot_yield_kg_per_kg": 0.198,
+    "door_open_time_s": 100.0,
+    "window_break_temperature_C": 150.0,
+    "evacuation_start_fire_time_s": 300.0,
+    "number_of_physical_regions": 58,
+    "gas_sampling_height_m": 2.0,
+    "gases": ["CO", "CO2", "HCN"]
+  },
+  "public_rate_table_confirmed": {
+    "duration_s": 900.0,
+    "interval_s": 5.0,
+    "note": "Output table contract; the original FDS output aggregation setting is not supplied"
+  },
+  "candidate_assumptions": {
+    "burner_XB_m": [3.4, 5.4, 23.7, 24.7, 0.0, 0.2],
+    "burner_note": "2 x 1 x 0.2 m template generator size; mesh-aligned near template Room24 thermocouple, not verified room centroid or original burner",
+    "post_peak_HRR": "constant at 5000 kW through 900 s; not specified in paper",
+    "ramp_spacing_s": 1.0,
+    "window_model": "temperature-controlled HOLE through inherited INERT wall, not a thermally modelled glass panel",
+    "window_trigger_XYZ_m": [0.2, 24.3, 2.0],
+    "window_trigger_quantity": "TEMPERATURE",
+    "window_trigger_note": "gas temperature near inner window face; paper describes window temperature, so this is an explicit surrogate",
+    "gas_output": "wet volume fraction, instantaneous point samples, DT_DEVC=5, TIME_AVERAGED=F; original averaging unknown",
+    "physical_to_RL_mapping": "piecewise inferred correspondence from template thermocouples and public R labels; not author confirmed",
+    "solver_reference": "FDS 6.9.1 manual used for syntax only; original solver version unknown"
+  },
+  "required_unknowns": {
+    "HCN_yield_kg_per_kg": null,
+    "ventilation_L_per_min": null,
+    "COHb_incapacitation_percent": null,
+    "equation_rate_time_unit": null,
+    "original_gas_concentration_units_confirmed": false,
+    "original_window_temperature_definition_confirmed": false,
+    "original_burner_and_postpeak_confirmed": false,
+    "exact_geometry_and_region_mapping_confirmed": false
+  },
+  "scope_limits": {
+    "FDS_runs": 0,
+    "training_updates": 0,
+    "LLM_requests": 0,
+    "small_case_reconstruction": false,
+    "sealed_final48_scenarios_read": false,
+    "fit_physics_to_archived_FER_or_FED": false
+  }
+}

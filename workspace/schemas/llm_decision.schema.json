@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/fire-evac/llm_decision.schema.json",
+  "title": "Evacuee high-level decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "start_evacuation",
+    "target_exit",
+    "follow_sign",
+    "follow_crowd",
+    "decision_delay_s",
+    "confidence",
+    "reason_codes"
+  ],
+  "properties": {
+    "start_evacuation": {"type": "boolean"},
+    "target_exit": {"type": ["string", "null"]},
+    "follow_sign": {"type": "boolean"},
+    "follow_crowd": {"type": "boolean"},
+    "decision_delay_s": {"type": "number", "minimum": 0, "maximum": 300},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "reason_codes": {
+      "type": "array",
+      "maxItems": 5,
+      "items": {
+        "type": "string",
+        "enum": [
+          "familiar_route",
+          "follow_sign",
+          "follow_majority",
+          "avoid_smoke",
+          "avoid_congestion",
+          "help_companion",
+          "wait_for_information",
+          "other"
+        ]
+      }
+    }
+  }
+}
+

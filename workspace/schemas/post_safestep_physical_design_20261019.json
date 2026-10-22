@@ -1,0 +1,175 @@
+{
+  "schema_version": "1.0",
+  "protocol_id": "post_safestep_physical_design_20261019_v1_1",
+  "date_local": "2026-10-19",
+  "timezone": "Asia/Shanghai",
+  "status": "FACTORIAL_DESIGN_FROZEN_EXECUTABLE_PHYSICS_PENDING",
+  "question": "Do causal forecast and fixed suggestion gates reduce path-integrated dose relative to a latest-delivered-sample snapshot on new FDS-generated fields?",
+  "evidence_scope": "New numerical cases separate from SafeStep input; not independent physical experiments or validated real buildings.",
+  "matrix": {
+    "design": "full_factorial",
+    "factors": {
+      "layout_id": ["L1", "L2"],
+      "fire_position": ["F1", "F2", "F3"],
+      "growth_id": ["G150", "G300"],
+      "ventilation_id": ["V0", "V1"]
+    },
+    "expected_cases": 24,
+    "run_order_seed": 20261019,
+    "randomization": "Python Random(seed).shuffle over lexicographic product; frozen CSV is authoritative; no effect-based ordering",
+    "replication": "One nominal solver realization per case. Starts, departures, observation variants, and mesh checks are nested diagnostics, not new independent physical cases."
+  },
+  "geometry_design_assumptions": {
+    "units": "m",
+    "layout_specification": "UNION_OF_OPEN_RECTANGLES_WITHIN_RECTANGULAR_DOMAIN; remaining floor footprint is solid; wall construction and boundary representation pending FDS input freeze",
+    "L1": {
+      "name": "straight_corridor_with_three_rooms",
+      "domain_xyz": [24, 12, 3],
+      "open_rectangles_xy": [
+        [0, 24, 5, 7],
+        [2, 8, 0, 5], [10, 16, 0, 5], [18, 24, 0, 5]
+      ],
+      "room_corridor_aperture_rule": "Open-rectangle union gives full open room interfaces. A later door-wall refinement is a protocol amendment, not implicit here.",
+      "exit_centers_xy": [[0, 6], [24, 6]],
+      "fire_centers_xy": {"F1": [5, 2.5], "F2": [13, 2.5], "F3": [21, 2.5]},
+      "extra_window_xy_plane": [13, 0],
+      "start_centers_xy": [[3, 6], [6, 6], [9, 6], [12, 6], [15, 6], [18, 6], [21, 6], [5, 4], [13, 4], [21, 4]]
+    },
+    "L2": {
+      "name": "loop_corridor_with_central_obstacle_and_continuous_open_south_band",
+      "domain_xyz": [24, 16, 3],
+      "open_rectangles_xy": [
+        [0, 24, 3, 5], [0, 24, 11, 13],
+        [3, 5, 3, 13], [19, 21, 3, 13],
+        [3, 9, 0, 3], [9, 15, 0, 3], [15, 21, 0, 3]
+      ],
+      "exit_centers_xy": [[0, 4], [24, 12]],
+      "fire_centers_xy": {"F1": [6, 1.5], "F2": [12, 1.5], "F3": [18, 1.5]},
+      "extra_window_xy_plane": [12, 0],
+      "start_centers_xy": [[3, 4], [8, 4], [12, 4], [16, 4], [20, 4], [4, 8], [20, 8], [4, 12], [12, 12], [20, 12]]
+    },
+    "exit_aperture_width_m": 2.0,
+    "exit_aperture_height_m": 2.0,
+    "window_width_m": 2.0,
+    "window_height_m": 1.0,
+    "window_sill_height_m": 1.5,
+    "ceiling_height_m": 3.0,
+    "ambient_temperature_C": 20.0,
+    "source_status": "All new geometry, apertures and ambient values here are investigator-selected modeling assumptions, not measured building parameters."
+  },
+  "fire_design_assumptions": {
+    "prescribed_peak_HRR_kW": 1000.0,
+    "burner_area_m2": 1.0,
+    "G150_time_to_peak_s": 150.0,
+    "G300_time_to_peak_s": 300.0,
+    "curve": "Q(t)=min(1000,1000*(t/time_to_peak)^2) kW, held at prescribed peak thereafter; actual oxygen-limited HRR must be checked separately",
+    "simulation_end_s": 900.0,
+    "V0": "Both egress apertures open throughout; extra room window closed throughout",
+    "V1": "Both egress apertures open throughout; extra room window open from ignition",
+    "fuel": null,
+    "CO_yield_kg_per_kg": null,
+    "soot_yield_kg_per_kg": null,
+    "HCN_yield_kg_per_kg": null,
+    "wall_material_and_thermal_properties": null,
+    "source_status": "HRR design targets are fixed investigator choices; unresolved chemistry and walls must not be silently borrowed from SafeStep."
+  },
+  "sampling_and_paths": {
+    "output_interval_s": 1.0,
+    "output_statistics": "instantaneous; exact solver keyword must be pinned to the installed version",
+    "gas_sampling_height_m": 1.5,
+    "native_outputs": ["CO_volume_fraction", "CO2_volume_fraction", "O2_volume_fraction", "HCN_if_defined", "temperature_C", "extinction_coefficient_per_m", "actual_HRR_kW"],
+    "path_resolution_m": 1.0,
+    "neighbor_rule": "four-neighbor movement plus connectors to absorbing boundary exits; graph edges may not cross solid cells",
+    "walking_speed_m_per_s": 0.8,
+    "maximum_moves": 240,
+    "allow_wait": false,
+    "departure_fire_times_s": [150, 300, 450],
+    "observation_conditions": ["clean", "lag15"],
+    "lag15_delivery_rule": "acquisition_time+15<=decision_time; never interpolate from not-yet-delivered endpoints",
+    "predeparture_dose": "excluded, as in the previous path model",
+    "exit_termination": "first arrival at absorbing exit; no modeled exit dwell dose",
+    "failure_handling": "No exit by 240 moves is a failure. Compare arrival/failure first, then dose on jointly reached cases; never reward a failed route for low partial dose.",
+    "primary_dose_definition": null,
+    "primary_dose_lock_required": "Lock one published gas-rate formula, units, respiration/activity assumptions, included species, time base, code version, and independent hand-checks before any policy scoring. Static-device cumulative FED must not be summed along a moving route.",
+    "incapacitation_threshold_rule": "not implemented; reaching an exit does not imply tenability or safety"
+  },
+  "method_set_frozen": {
+    "online_primary_comparator": "latest_delivered_sample_snapshot",
+    "online_methods": ["nearest_exit", "latest_delivered_sample_snapshot", "trend30", "half30", "ensemble_mean_30_half30_60", "consensus_gate_5pct", "switch_margin_gate_5_1_10pct"],
+    "extra_information_reference": "full_future_min_dose",
+    "forecast_rules": "Same anchored OLS windows/gains, nonnegative clipping, and 60 s capped extrapolation as the frozen 2026-10-18 method; only new graph and path step time differ.",
+    "execution": "Apply only the first action and replan with the remaining 240-k move horizon.",
+    "fairness": "Online planners receive the same delivered fields, map and movement rules; nearest-exit intentionally uses only distances; gate computation is greater and runtime is reported separately; oracle has future information.",
+    "new_LLM_calls": 0,
+    "new_RL_training": 0,
+    "threshold_tuning_on_new_cases": false
+  },
+  "evaluation_precommitment": {
+    "nominal_case_count": 24,
+    "path_pairs_per_method": 1440,
+    "path_pair_count_formula": "24 cases * 10 starts * 3 departures * 2 delivered-observation conditions",
+    "primary_summary": "Within each FDS case and observation condition, R_s=sum(F_snapshot-F_method)/sum(F_snapshot) on jointly reached start/departure pairs; primary R_macro is the equal-case mean of R_s. Report clean and lag15 separately. A case with summed snapshot dose<1e-8 has undefined relative benefit, is disclosed with absolute differences and a missing-relative count, and prevents claiming the continuation criterion is met for all 24 cases. Also report pooled-dose relative reduction with its distinct weighting.",
+    "harm_metrics": ["case-specific signed mean difference", "number of routes with higher dose", "95th percentile of paired absolute dose increase", "worst paired dose increase", "immediate reversals", "failure count", "walking seconds"],
+    "independence": "No route-level independent-sample significance claims; 24 deterministic nominal cases support within-design description, not a powered generalization test.",
+    "sample_size_reason": "24 is the factorial coverage budget. It is not a power calculation or a guarantee of sufficient independent fire replication.",
+    "descriptive_continuation_criteria": {
+      "purpose": "Engineering screening targets, not a validated safety margin or statistical rejection rule",
+      "equal_case_mean_relative_dose_reduction_at_least": 0.02,
+      "criterion_applies_separately_to": ["clean", "lag15"],
+      "failures_must_not_exceed_snapshot": true,
+      "new_failure_pairs_must_equal_zero": true,
+      "new_failure_definition": "Snapshot reaches the exit but the proposed method fails on the same case, observation, departure and start pair.",
+      "each_layout_macro_relative_reduction_must_be_nonnegative": true,
+      "layout_criterion": "For each observation condition, mean of R_s over the 12 cases in each layout must be >=0; all case relative values must be defined.",
+      "worst_case_route_relative_dose_increase_upper_screen": 0.05,
+      "near_zero_baseline_rule": "If snapshot dose<1e-8, omit route percentage and report absolute difference; all absolute harms remain in the report.",
+      "next_action_if_pass": "Seek a new independent confirmation source before proposing LLM or training; passing this design is not final confirmation.",
+      "next_action_if_fail": "Report as failed or inconclusive extension; do not search thresholds on this matrix."
+    }
+  },
+  "execution_gates": [
+    {"id": "P1", "requirement": "Pin solver executable version/hash, matching manual and a bounded startup check", "status": "PENDING"},
+    {"id": "P2", "requirement": "Freeze fuel, species yields, wall parameters and provenance; label assumptions", "status": "PENDING"},
+    {"id": "P3", "requirement": "Render and inspect geometry/graph/vents, connectivity and sensor placement", "status": "PENDING"},
+    {"id": "P4", "requirement": "Lock gas-to-rate conversion and verify units, time base and known concentration examples", "status": "PENDING"},
+    {"id": "P5", "requirement": "Prespecified mesh/output sensitivity, actual HRR and relevant official validation case applicability checks", "status": "PENDING"},
+    {"id": "P6", "requirement": "Record bounded pilot wall time/memory; freeze executable inputs before scoring methods", "status": "PENDING"}
+  ],
+  "mesh_plan": {
+    "candidate_spacing_m": [0.5, 0.25, 0.125],
+    "candidate_primary_spacing_m": 0.25,
+    "representative_case_ids": ["L1_F2_G150_V0", "L2_F2_G150_V1"],
+    "comparison": "Compare native species/temperature curves and fixed diagnostic-route doses, not method effect rankings. Record actual discretized apertures and burner area at every mesh. Exit height 2.0 m is aligned on all three candidate grids; wall and window realization still needs checking. No claim that D*/dx alone validates the mesh.",
+    "provisional_relative_change_target": 0.1,
+    "target_status": "Investigator screening choice; near-zero comparisons use absolute values; acceptance must include physically relevant variable review.",
+    "if_unresolved": "Stop before method evaluation, amend physics protocol with explanation, preserve failed outputs."
+  },
+  "review_amendment": {
+    "version": "1.1",
+    "timing": "Before any new FDS run or policy scoring",
+    "changes": [
+      "Require zero new paired failures, rather than only nonincreasing total failures",
+      "Define per-layout non-worsening by the equal-case mean relative benefit",
+      "Correct L2 description: the touching south rectangles form a continuous open band",
+      "Change exit height from 2.25 to 2.0 m to align the aperture on all three candidate mesh spacings"
+    ],
+    "previous_protocol_snapshot": "outputs/safestep_closure_plan_20261019/frozen_factorial_design.json",
+    "previous_report_snapshot": "outputs/safestep_closure_plan_20261019/pre_review_design_report.md",
+    "factorial_cases_and_run_order_changed": false
+  },
+  "scope_controls": {
+    "this_stage_runs_FDS": false,
+    "this_stage_scores_new_policies": false,
+    "sealed_final48_access": false,
+    "old_outputs_may_be_modified": false,
+    "on_parameter_change": "New protocol version and hashes, with reason and timing; never retroactively call a viewed scenario unseen."
+  },
+  "official_sources_checked": [
+    {"url": "https://pages.nist.gov/fds-smv/", "access_date_local": "2026-10-19", "supports": "FDS scope as smoke and heat flow simulation; not evidence of validation for our new geometry"},
+    {"url": "https://pages.nist.gov/fds-smv/manuals.html", "access_date_local": "2026-10-19", "supports": "Official manual entry points; version must match executable before implementation"},
+    {"url": "https://github.com/firemodels/fds/wiki/FDS-Validation-Process", "access_date_local": "2026-10-19", "supports": "Official validation cases, experimental and solver-output repositories are distinct"},
+    {"url": "https://github.com/firemodels/fds/blob/FDS-6.11.1/Manuals/FDS_User_Guide/FDS_User_Guide.tex", "access_date_local": "2026-10-19", "supports": "Fixed-version manual: Mesh Resolution; Time-Dependent Functions; Device Output; FED/FIC; gas quantity definitions. Exact local executable still pending."},
+    {"url": "https://github.com/firemodels/fds/blob/FDS-6.11.1/Verification/Species/FED_CO_HCN.fds", "access_date_local": "2026-10-19", "supports": "Candidate known-input verification fixture only, not universal fuel-yield evidence"},
+    {"url": "https://github.com/firemodels/fds/blob/FDS-6.11.1/Verification/Species/FED_FIC_SMIX.fds", "access_date_local": "2026-10-19", "supports": "Candidate species/FED verification fixture; no execution claimed"}
+  ]
+}
