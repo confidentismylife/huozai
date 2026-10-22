@@ -1,0 +1,39 @@
+# Credentials and local configuration
+.env
+.env.*
+*.key
+*.pem
+*credential*
+*secret*
+
+# Model and API caches
+cache/
+caches/
+responses/
+api_responses/
+*.jsonl
+
+# Raw data, outputs and local artifacts
+data/
+output/
+outputs/
+artifacts/
+tmp/
+*.log
+*.zip
+*.pdf
+*.xlsx
+*.pptx
+
+# Python and editors
+__pycache__/
+.pytest_cache/
+.venv/
+*.py[cod]
+.idea/
+.vscode/
+
+# Operating systems
+.DS_Store
+Thumbs.db
+
